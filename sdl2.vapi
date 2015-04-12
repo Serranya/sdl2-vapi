@@ -575,6 +575,16 @@ namespace SDL {
 		 * Reference count that can be incremented by the application.
 		 */
 		public int ref_count;
+
+		/**
+		 * Use this function to load a surface from a BMP file.
+		 *
+		 * @param file The file containing an BMP image.
+		 *
+		 * @return Returns a new Surface or NULL if there was an error. Call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_LoadBMP")]
+		public static Surface? load_bmp(string file);
 	}
 }
 
