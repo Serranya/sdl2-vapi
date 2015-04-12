@@ -239,6 +239,17 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_CreateWindow")]
 		public static Window? create_window(string title, int x, int y, int w, int h, uint32 flags);
+
+		/**
+		 * Use this function to get the size of a window's client area.
+		 *
+		 * NULL can safely be passed as the w or h parameter if the width or height value is not desired.
+		 *
+		 * @param w will be filled with the width of the window.
+		 * @param h will be filled with the height of the window.
+		 */
+		[CCode (cname="SDL_GetWindowSize")]
+		public void get_size(out int w, out int h);
 	}
 
 	[Compact, CCode (cprefix="SDL_", cname="SDL_Renderer", destroy_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
