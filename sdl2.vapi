@@ -4,7 +4,8 @@ namespace SDL {
 	/**
 	 * These flags can be OR'd together.
 	 */
-	[Flags, CCode (cname="int", cprefix="SDL_INIT_", has_type_id=false)]
+	[CCode (cname="int", cprefix="SDL_INIT_", has_type_id=false)]
+	[Flags]
 	public enum InitFlag {
 		/**
 		 * timer subsystem
@@ -137,7 +138,183 @@ namespace SDL {
 		TRANSPARENT
 	}
 
-	[Compact, CCode (cprefix="SDL_", cname="SDL_Window", destroy_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
+	/**
+	 * A structure that represents a color.
+	 */
+	[CCode (cname="SDL_Color", cheader_filename="SDL2/SDL_pixels.h", has_type_id=false)]
+	[SimpleType]
+	public struct Color {
+		/**
+		 * The red component in the range 0-255.
+		 */
+		public uint8 r;
+
+		/**
+		 * The green component in the range 0-255.
+		 */
+		public uint8 g;
+
+		/**
+		 * The blue component in the range 0-255.
+		 */
+		public uint8 b;
+
+		/**
+		 * The alpha component in the range 0-255.
+		 */
+		public uint8 a;
+	}
+
+	[CCode (cname="SDL_Palette", cheader_filename="SDL2/SDL_pixels.h", free_function="SDL_FreePalette", has_type_id=false)]
+	[Compact]
+	public struct Palette {
+
+		/**
+		 * The number of colors in the palette.
+		 */
+		public int ncolors;
+
+		/**
+		 * An array of Color structures representing the palette.
+		 */
+		public Color[] colors;
+
+		/**
+		 * Use this function to create a palette structure with the specified number of color entries.
+		 *
+		 * The palette entries are initialized to white.
+		 *
+		 * @param ncolors represents the number of color entries in the color palette
+		 *
+		 * @return Returns a new Palette class on success or NULL on failure (e.g. if there wasn't enough memory). Call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_AllocPalette")]
+		public static Palette? alloc(int ncolors);
+
+		/**
+		 * Use this function to set a range of colors in a palette.
+		 *
+		 * @param colors An array of Color structures to copy into the palette.
+		 * @param first_color the index of the first palette entry to modify.
+		 * @param ncolors The number of entries to modify.
+		 */
+		[CCode (cname="SDL_SetPaletteColors")]
+		public int set_colors(Color[] colors, int first_color, int ncolors);
+	}
+
+	/**
+	 * Everything in the PixelFormat structure is read-only.
+	 */
+	[CCode (cname="SDL_PixelFormat", cheader_filename="SDL2/SDL_pixels.h", cprefix="SDL_", free_function="SDL_FreeFormat", has_type_id=false)]
+	[Compact]
+	public class PixelFormat {
+
+		public PixelFormatEnum format;
+
+		/**
+		 * An Palette structure associated with this PixelFormat, or null if the format doesn't have a palette.
+		 */
+		public Palette palette;
+
+		/**
+		 * the number of significant bits in a pixel value, eg: 8, 15, 16, 24, 32.
+		 */
+		[CCode ( cname="BitsPerPixel")]
+		public uint8 bits_per_pixel;
+
+		/**
+		 * the number of bytes required to hold a pixel value, eg: 1, 2, 3, 4.
+		 */
+		[CCode ( cname="BytesPerPixel")]
+		public uint8 bytes_per_pixel;
+
+		/**
+		 * A mask representing the location of the red component of the pixel.
+		 */
+		[CCode ( cname="Rmask")]
+		public uint32 r_mask;
+
+		/**
+		 * A mask representing the location of the greeb component of the pixel.
+		 */
+		[CCode ( cname="Gmask")]
+		public uint32 g_mask;
+
+		/**
+		 * A mask representing the location of the blue component of the pixel.
+		 */
+		[CCode ( cname="Bmask")]
+		public uint32 b_mask;
+
+		/**
+		 * A mask representing the location of the alpha component of the pixel
+		 * or 0 if the pixel format doesn't have any alpha information.
+		 */
+		[CCode ( cname="Amask")]
+		public uint32 a_mask;
+	}
+
+	[CCode (cname="Uint32", cprefix="SDL_PIXELFORMAT_", cheader_filename="SDL2/SDL_pixels.h", has_type_id=false)]
+	[Compact]
+	public enum PixelFormatEnum {
+		UNKNOWN, INDEX1LSB, INDEX1MSB, INDEX4LSB, INDEX4MSB,
+		INDEX8, RGB332, RGB444, RGB555, ARGB4444, RGBA4444,
+		ABGR4444, BGRA4444, ARGB1555, RGBA5551, ABGR1555,
+		BGRA5551, RGB565, BGR565, RGB24, BGR24, RGB888,
+		RGBX8888, BGR888, BGRX8888, ARGB8888, RGBA8888,
+		ABGR8888, BGRA8888, ARGB2101010,
+		/**
+		* planar mode: Y + V + U (3 planes)
+		*/
+		YV12,
+		/**
+		* planar mode: Y + U + V (3 planes)
+		*/
+		IYUV,
+		/**
+		* packed mode: Y0+U0+Y1+V0 (1 plane)
+		*/
+		YUY2,
+		/**
+		* packed mode: U0+Y0+V0+Y1 (1 plane)
+		*/
+		UYVY,
+		/**
+		* packed mode: Y0+V0+Y1+U0 (1 plane)
+		*/
+		YVYU
+	}
+
+	/**
+	 * A structure that defines a rectangle, with the origin at the upper left.
+	 */
+	[CCode (cheader_filename="SDL2/SDL_rect.h", cname="SDL_Rect", has_type_id=false)]
+	public struct Rect {
+
+		/**
+		 * The x location of the rectangle's upper left corner.
+		 */
+		public int x;
+
+		/**
+		 * The y location of the rectangle's upper left corner.
+		 */
+		public int y;
+
+		/**
+		 * The width of the rectangle.
+		 */
+		public int w;
+
+		/**
+		 * The height of the rectangle.
+		 */
+		public int h;
+
+	}
+
+	[CCode (cprefix="SDL_", cname="SDL_Window", destroy_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
+	[Compact]
 	public class Window {
 
 		/**
@@ -155,7 +332,8 @@ namespace SDL {
 		/**
 		 * The flags on a window.
 		 */
-		[Flags, CCode (cname="SDL_WindowFlags", cprefix="SDL_WINDOW_", has_type_id=false)]
+		[CCode (cname="SDL_WindowFlags", cprefix="SDL_WINDOW_", has_type_id=false)]
+		[Flags]
 		public enum Flags {
 			/**
 			 * Fullscreen window.
@@ -250,9 +428,18 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_GetWindowSize")]
 		public void get_size(out int w, out int h);
+
+		/**
+		 * Use this function to get the SDL surface associated with the window.
+		 *
+		 * @return Returns the surface associated with the window, or null on failure; call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_GetWindowSurface")]
+		public Surface? get_surface();
 	}
 
-	[Compact, CCode (cprefix="SDL_", cname="SDL_Renderer", destroy_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
+	[CCode (cprefix="SDL_", cname="SDL_Renderer", destroy_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
+	[Compact]
 	public class Renderer {
 
 		/**
@@ -321,7 +508,8 @@ namespace SDL {
 		public int set_draw_color(uint8 r, uint8 g, uint8 b, uint8 a);
 	}
 
-	[Compact, CCode (cname="SDL_TimerID", ref_function="", unref_function="", cheader_filename="SDL2/SDL_timer.h", has_type_id=false)]
+	[CCode (cname="SDL_TimerID", ref_function="", unref_function="", cheader_filename="SDL2/SDL_timer.h", has_type_id=false)]
+	[Compact]
 	public class Timer {
 
 		/**
@@ -333,6 +521,60 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_Delay")]
 		public static void delay(uint32 ms);
+	}
+
+	/**
+	 * A collection of pixels used in software blitting.
+	 *
+	 * This class should be treated as read-only, except for the pixels attribute,
+	 * which, if not null, contains the raw pixel data for the surface.
+	 */
+	[CCode (cname="SDL_Surface", free_function="SDL_FreeSurface", cheader_filename="SDL2/SDL_surface.h", unref_function="", has_type_id=false)]
+	public class Surface {
+
+		/**
+		 * The format of the pixels stored in the surface. (read-only)
+		 */
+		public PixelFormat format;
+
+		/**
+		 * The width in pixels. (read-only)
+		 */
+		public int w;
+
+		/**
+		 * The height in pixels. (read-only)
+		 */
+		public int h;
+
+		/**
+		 * The lenght of a row of pixels in bytes. (read-only)
+		 */
+		public int pitch;
+
+		/**
+		 * The pointer to the actual pixel data. (read-write)
+		 *
+		 * With most surfaces you can access the pixels directly. Surfaces that have been optimized with
+		 * set_rle() should be locked with lock() before accessing pixels. When you are done you should call
+		 * unlock() before blitting.
+		 */
+		public void* pixels;
+
+		/**
+		 * An arbitrary pointer you can set. (read-write)
+		 */
+		public void *userdata;
+
+		/**
+		 * An Rect structure used to clip blits to the surface which can be set by set_clip_rect() (read-only)
+		 */
+		public Rect clip_rect;
+
+		/**
+		 * Reference count that can be incremented by the application.
+		 */
+		public int ref_count;
 	}
 }
 
