@@ -170,13 +170,9 @@ namespace SDL {
 	public struct Palette {
 
 		/**
-		 * The number of colors in the palette.
-		 */
-		public int ncolors;
-
-		/**
 		 * An array of Color structures representing the palette.
 		 */
+		[CCode (array_length_cname="ncolors", array_length_type="int")]
 		public Color[] colors;
 
 		/**
@@ -196,10 +192,9 @@ namespace SDL {
 		 *
 		 * @param colors An array of Color structures to copy into the palette.
 		 * @param first_color the index of the first palette entry to modify.
-		 * @param ncolors The number of entries to modify.
 		 */
-		[CCode (cname="SDL_SetPaletteColors")]
-		public int set_colors(Color[] colors, int first_color, int ncolors);
+		[CCode (cname="SDL_SetPaletteColors", array_length_pos=2.1)]
+		public int set_colors(Color[] colors, int first_color);
 	}
 
 	/**
