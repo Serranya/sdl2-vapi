@@ -121,7 +121,7 @@ namespace SDL {
 	 *   //Video and Audio is initialized
 	 * }}}
 	 *
-	 * @param flags any of the flags used by @link SDL.init().
+	 * @param flags any of the flags used by SDL.init().
 	 *
 	 * @return If flags is 0 it returns a mask of all initialized subsystems, otherwise it returns the initialization status of the specified subsystems.<<BR>>
 	 * The return value does not include SDL.InitFlag.NOPARACHUTE.
