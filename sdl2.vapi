@@ -204,6 +204,9 @@ namespace SDL {
 	[Compact]
 	public class PixelFormat {
 
+		/**
+		 * One of the SDL.PixelFormatEnum values.
+		 */
 		public PixelFormatEnum format;
 
 		/**
