@@ -51,8 +51,13 @@ namespace SDL {
 	 * The Event Handling, File I/O, and Threading subsystems are initialized by default.
 	 * You must specifically initialize other subsystems if you use them in your application.
 	 *
-	 * If you want to initialize subsystems separately you would call SDL.init(0) followed by
-	 * SDL.init_sub_system() with the desired subsystem flag.
+	 * If you want to initialize subsystems separately you would call:
+	 *
+	 * {{{
+	 * SDL.init(0);
+	 * }}}
+	 *
+	 * followed by {@link SDL.init_sub_system} with the desired subsystem flag.
 	 *
 	 * @param flags subsystem initialization flags.
 	 *
@@ -64,14 +69,14 @@ namespace SDL {
 	/**
 	 * Use this function to initialize specific SDL subsystems.
 	 *
-	 * SDL.init() initializes assertions and crash protection and then calls SDL.init_sub_system().
-	 * If you want to bypass those protections you can call SDL_InitSubSystem() directly.
+	 * {@link SDL.init} initializes assertions and crash protection and then calls SDL.init_sub_system().
+	 * If you want to bypass those protections you can call SDL.init_sub_system() directly.
 	 *
-	 * Subsystem initialization is ref-counted, you must call SDL.quit_sub_system() for each SDL.init_sub_system()
-	 * to correctly shutdown a subsystem manually (or call SDL.quit() to force shutdown).
+	 * Subsystem initialization is ref-counted, you must call {@link SDL.quit_sub_system} for each SDL.init_sub_system()
+	 * to correctly shutdown a subsystem manually (or call {@link SDL.quit} to force shutdown).
 	 * If a subsystem is already loaded then this call will increase the ref-count and return.
 	 *
-	 * @param flags any of the flags used by SDL.init().
+	 * @param flags any of the flags used by {@link SDL.init}.
 	 *
 	 * @return Returns 0 on success or a negative error code on failure; call SDL.get_error() for more information.
 	 */
@@ -81,11 +86,11 @@ namespace SDL {
 	/**
 	 * Use this function to clean up all initialized subsystems. You should call it upon all exit conditions.
 	 *
-	 * You should call this function even if you have already shutdown each initialized subsystem with SDL.quit_sub_system().
+	 * You should call this function even if you have already shutdown each initialized subsystem with {@link SDL.quit_sub_system}.
 	 * It is safe to call this function even in the case of errors in initialization.
 	 *
 	 * If you start a subsystem using a call to that subsystem's init function (for example SDL.Video.init())
-	 * instead of SDL.init() or SDL.init_sub_system(), then you must use that subsystem's quit function (SDL.Video.quit())
+	 * instead of {@link SDL.init} or {@link SDL.init_sub_system}, then you must use that subsystem's quit function (SDL.Video.quit())
 	 * to shut it down before calling SDL.quit().
 	 */
 	[CCode (cname="SDL_Quit")]
@@ -94,7 +99,7 @@ namespace SDL {
 	/**
 	 * Use this function to shut down specific SDL subsystems.
 	 *
-	 * @param flags any of the flags used by SDL.init().
+	 * @param flags any of the flags used by {@link SDL.init}.
 	 */
 	[CCode (cname="SDL_Quit")]
 	public static void quit_sub_system(uint32 flags);
@@ -121,10 +126,10 @@ namespace SDL {
 	 *   //Video and Audio is initialized
 	 * }}}
 	 *
-	 * @param flags any of the flags used by SDL.init().
+	 * @param flags any of the flags used by {@link SDL.init}.
 	 *
 	 * @return If flags is 0 it returns a mask of all initialized subsystems, otherwise it returns the initialization status of the specified subsystems.<<BR>>
-	 * The return value does not include SDL.InitFlag.NOPARACHUTE.
+	 * The return value does not include {@link SDL.InitFlag.NOPARACHUTE}.
 	 */
 	[CCode (cname="SDL_WasInit")]
 	public static uint32 was_init(uint32 flags);
@@ -182,7 +187,7 @@ namespace SDL {
 		 *
 		 * @param ncolors represents the number of color entries in the color palette
 		 *
-		 * @return Returns a new Palette class on success or NULL on failure (e.g. if there wasn't enough memory). Call SDL.get_error() for more information.
+		 * @return Returns a new Palette class on success or null on failure (e.g. if there wasn't enough memory). Call SDL.get_error() for more information.
 		 */
 		[CCode (cname="SDL_AllocPalette")]
 		public static Palette? alloc(int ncolors);
@@ -205,7 +210,7 @@ namespace SDL {
 	public class PixelFormat {
 
 		/**
-		 * One of the SDL.PixelFormatEnum values.
+		 * One of the {@link SDL.PixelFormatEnum} values.
 		 */
 		public PixelFormatEnum format;
 
@@ -395,11 +400,11 @@ namespace SDL {
 		 * Use this function to create a window with the specified position, dimensions, and flags.
 		 *
 		 * @param title the title of the window.
-		 * @param x the x position of the window, SDL.Window.POS_CENTERED or SDL.Window.POS_UNDEFINED.
-		 * @param y the y position of the window, SDL.Window.POS_CENTERED or SDL.Window.POS_UNDEFINED.
+		 * @param x the x position of the window, {@link SDL.Window.POS_CENTERED} or {@link SDL.Window.POS_UNDEFINED}.
+		 * @param y the y position of the window, {@link SDL.Window.POS_CENTERED} or {@link SDL.Window.POS_UNDEFINED}.
 		 * @param w the width of the window.
 		 * @param h the height of the window.
-		 * @param flags 0, or one or more of the following SDL.Window.Flags OR'd together:
+		 * @param flags 0, or one or more of the following {@link SDL.Window.Flags} OR'd together:
 		 * FULLSCREEN
 		 * ,FULLSCREEN_DESKTOP
 		 * ,OPENGL
@@ -419,7 +424,7 @@ namespace SDL {
 		/**
 		 * Use this function to get the size of a window's client area.
 		 *
-		 * NULL can safely be passed as the w or h parameter if the width or height value is not desired.
+		 * null can safely be passed as the w or h parameter if the width or height value is not desired.
 		 *
 		 * @param w will be filled with the width of the window.
 		 * @param h will be filled with the height of the window.
@@ -428,7 +433,7 @@ namespace SDL {
 		public void get_size(out int w, out int h);
 
 		/**
-		 * Use this function to get the SDL surface associated with the window.
+		 * Use this function to get the {@link SDL.Surface} associated with the window.
 		 *
 		 * @return Returns the surface associated with the window, or null on failure; call SDL.get_error() for more information.
 		 */
@@ -466,11 +471,11 @@ namespace SDL {
 		/**
 		 * Use this function to create a 2D rendering context for a window.
 		 *
-		 * Note that providing no flags gives priority to available SDL_RENDERER_ACCELERATED renderers.
+		 * Note that providing no flags gives priority to available {@link SDL.Renderer.Flags.ACCELERATED} renderers.
 		 *
 		 * @param window the window where rendering is displayed
 		 * @param index the index of the rendering driver to initialize, or -1 to initialize the first one supporting the requested flags.
-		 * @param flags 0, or one or more SDL.Renderer.Flags OR'd together.
+		 * @param flags 0, or one or more {@link SDL.Renderer.Flags} OR'd together.
 		 *
 		 * @return Returns a valid rendering context or null if there was an error. Call SDL.get_error() for more information.
 		 */
@@ -497,7 +502,7 @@ namespace SDL {
 		 * @param r The Red value used to draw on the rendering target.
 		 * @param g The Green value used to draw on the rendering target.
 		 * @param b The Blue value used to draw on the rendering target.
-		 * @param a The alpha value used to draw on the rendering target. Usually SDL.Alpha.OPAQUE (255).
+		 * @param a The alpha value used to draw on the rendering target. Usually {@link SDL.Alpha.OPAQUE} (255).
 		 *          Use set_draw_blend_mode() to specify how the alpha channel is used
 		 *
 		 * @return Returns 0 on success or a negative error code on failure; call SDL.get_error() for more information.
