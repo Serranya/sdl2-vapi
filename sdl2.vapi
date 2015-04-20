@@ -419,7 +419,7 @@ namespace SDL {
 		 * @return Returns the window that was created or null on failure; call SDL.get_error() for more information.
 		 */
 		[CCode (cname="SDL_CreateWindow")]
-		public static Window? create_window(string title, int x, int y, int w, int h, uint32 flags);
+		public static Window? create(string title, int x, int y, int w, int h, uint32 flags);
 
 		/**
 		 * Use this function to get the size of a window's client area.
