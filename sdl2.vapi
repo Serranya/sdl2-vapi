@@ -335,7 +335,7 @@ namespace SDL {
 
 	}
 
-	[CCode (cprefix="SDL_", cname="SDL_Window", destroy_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
+	[CCode (cprefix="SDL_", cname="SDL_Window", free_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
 	[Compact]
 	public class Window {
 
@@ -457,10 +457,18 @@ namespace SDL {
 		 * @return Returns the surface associated with the window, or null on failure; call SDL.get_error() for more information.
 		 */
 		[CCode (cname="SDL_GetWindowSurface")]
-		public Surface? get_surface();
+		public unowned Surface? get_surface();
+
+		/**
+		 * Use this function to copy the window surface to the screen.
+		 *
+		 * @return Returns 0 on success or a negative error code on failure; call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_UpdateWindowSurface")]
+		public int update_surface();
 	}
 
-	[CCode (cprefix="SDL_", cname="SDL_Renderer", destroy_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
+	[CCode (cprefix="SDL_", cname="SDL_Renderer", free_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
 	[Compact]
 	public class Renderer {
 
