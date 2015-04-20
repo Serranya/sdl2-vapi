@@ -589,7 +589,7 @@ namespace SDL {
 		public void *userdata;
 
 		/**
-		 * An Recta ngle used to clip blits to the surface which can be set by set_clip_rect() (read-only)
+		 * An Rectangle used to clip blits to the surface which can be set by set_clip_rect() (read-only)
 		 */
 		public Rectangle clip_rect;
 
