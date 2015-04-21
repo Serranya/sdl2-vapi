@@ -40,7 +40,7 @@ namespace SDL {
 		 */
 		EVERYTHING,
 		/**
-		 * compatibility; this flag is ignored
+		 * Prevents SDL from catching fatal signals.
 		 */
 		NOPARACHUTE
 	}
@@ -560,6 +560,7 @@ namespace SDL {
 	 * which, if not null, contains the raw pixel data for the surface.
 	 */
 	[CCode (cname="SDL_Surface", ref_function="SDL_Surface_ref", unref_function="SDL_FreeSurface", cheader_filename="SDL2/SDL_surface.h", has_type_id=false)]
+	[Compact]
 	public class Surface {
 
 		/**
@@ -605,6 +606,14 @@ namespace SDL {
 		 * Reference count that can be incremented by the application.
 		 */
 		public int ref_count;
+
+		/**
+		 * Obtain a new Reference.
+		 */
+		public Surface @ref() {
+			GLib.AtomicInt.inc(ref ref_count);
+			return this;
+		}
 
 		/**
 		 * Use this function to load a surface from a BMP file.
