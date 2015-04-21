@@ -607,14 +607,6 @@ namespace SDL {
 		public int ref_count;
 
 		/**
-		 * Obtain a new Reference.
-		 */
-		public Surface @ref() {
-			GLib.AtomicInt.inc(ref ref_count);
-			return this;
-		}
-
-		/**
 		 * Use this function to load a surface from a BMP file.
 		 *
 		 * @param file The file containing an BMP image.
@@ -623,6 +615,58 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_LoadBMP")]
 		public static Surface? load_bmp(string file);
+
+		/**
+		 * This performs a fast blit from the source surface to the destination surface.
+		 *
+		 * Only the position is used in the dstrect (the width and height are ignored).
+		 *
+		 * If either srcrect or dstrect are null, the entire surface is copied.
+		 *
+		 * The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
+		 *
+		 * The blit function should not be called on a locked surface.
+		 *
+		 * The  results of blitting operations vary greatly depending on whether SDL_SRCAPLHA is set or not. See SDL.SetAlpha for
+		 * an explaination of how this affects your results. Colorkeying and alpha attributes also interact with surface blitting,
+		 * as the following pseudo-code should hopefully explain.
+		 * {{{
+		 * if (source surface has SDL_SRCALPHA set) {
+		 *    if (source surface has alpha channel (that is, format->Amask != 0))
+		 *       blit using per-pixel alpha, ignoring any colour key
+		 *    else {
+		 *       if (source surface has SDL_SRCCOLORKEY set)
+		 *          blit using the colour key AND the per-surface alpha value
+		 *       else
+		 *          blit using the per-surface alpha value
+		 *    }
+		 * } else {
+		 *    if (source surface has SDL_SRCCOLORKEY set)
+		 *       blit using the colour key
+		 *    else
+		 *       ordinary opaque rectangular blit
+		 * }
+		 * }}}
+		 *
+		 * @param srcrect The Rectangle representing the rectangle to be copied, or null to copy the entire surface.
+		 * @param dst The Surface that is the blit target.
+		 * @param dstrect The Rectangle representing the the rectangle that is copied into.
+		 *
+		 * @return If the blit is successful, it returns 0, otherwise it returns -1.
+		 * If either of the surfaces were in video memory, and the blit returns -2, the video memory was lost, so it should be reloaded with artwork and re-blitted:
+		 * {{{
+		 * while ( SDL_BlitSurface(image, imgrect, screen, dstrect) == -2 ) {
+		 *    while ( SDL_LockSurface(image)) < 0 )
+		 *       Sleep(10);
+		 *    -- Write image pixels to image->pixels --
+		 *    SDL_UnlockSurface(image);
+		 * }
+		 * }}}
+		 * This happens under DirectX 5.0 when the system switches away from your fullscreen application. Locking the surface
+		 * will also fail until you  have  access  to  the  video  memory again.
+		 */
+		[CCode (cname="SDL_BlitSurface", cheader_filename="SDL.h")]
+		public int blit(Rectangle? srcrect, Surface dst, Rectangle? dstrect);
 
 		/**
 		 * Use this function to perform a fast fill of a rectangle with a specific color.
