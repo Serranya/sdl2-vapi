@@ -675,7 +675,7 @@ namespace SDL {
 		 * This happens under DirectX 5.0 when the system switches away from your fullscreen application. Locking the surface
 		 * will also fail until you  have  access  to  the  video  memory again.
 		 */
-		[CCode (cname="SDL_BlitSurface", cheader_filename="SDL.h")]
+		[CCode (cname="SDL_BlitSurface", cheader_filename="SDL2/SDL.h")]
 		public int blit(Rectangle? srcrect, Surface dst, Rectangle? dstrect);
 
 		/**
@@ -693,6 +693,190 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_FillRect")]
 		public int fill_rect(Rectangle? rect, uint32 color);
+	}
+
+	[CCode (cname="SDL_EventType", cprefix="SDL_", cheader_filename="SDL2/SDL_events.h")]
+	public enum EventType {
+		/**
+		 * User-requested quit
+		 */
+		QUIT,
+		/**
+		 * The application is being terminated by the OS.
+		 * Called on iOS in applicationWillTerminate().
+		 * Called on Android in onDestroy().
+		 */
+		APP_TERMINATING,
+		/**
+		 * The application is low on memory, free memory if possible.
+		 * Called on iOS in applicationDidReceiveMemoryWarning().
+		 * Called on Android in onLowMemory().
+		 */
+		APP_LOWMEMORY,
+		/**
+		 * The application is about to enter the background
+		 * Called on iOS in applicationWillResignActive()
+		 * Called on Android in onPause()
+		 */
+		APP_WILLENTERBACKGROUND,
+		/**
+		 * The application did enter the background and may not get CPU for some time
+		 * Called on iOS in applicationDidEnterBackground()
+		 * Called on Android in onPause()
+		 */
+		APP_DIDENTERBACKGROUND,
+		/**
+		 * The application is about to enter the foreground
+		 * Called on iOS in applicationWillEnterForeground()
+		 * Called on Android in onResume()
+		 */
+		APP_WILLENTERFOREGROUND,
+		/**
+		 * The application is now interactive
+		 * Called on iOS in applicationDidBecomeActive()
+		 * Called on Android in onResume()
+		 */
+		APP_DIDENTERFOREGROUND,
+		/**
+		 * Window state change
+		 */
+		WINDOWEVENT,
+		/**
+		 * System specific event
+		 */
+		SYSWMEVENT,
+		/**
+		 * Key pressed
+		 */
+		KEYDOWN,
+		/**
+		 * Key released
+		 */
+		KEYUP,
+		/**
+		 * Keyboard text editing (composition)
+		 */
+		TEXTEDITING,
+		/**
+		 * Keyboard text input
+		 */
+		TEXTINPUT,
+		/**
+		 * Mouse moved
+		 */
+		MOUSEMOTION,
+		/**
+		 * Mouse button pressed
+		 */
+		MOUSEBUTTONDOWN,
+		/**
+		 * Mouse button released
+		 */
+		MOUSEBUTTONUP,
+		/**
+		 * Mouse wheel motion
+		 */
+		MOUSEWHEEL,
+		/**
+		 * Joystick axis motion
+		 */
+		JOYAXISMOTION,
+		/**
+		 * Joystick trackball motion
+		 */
+		JOYBALLMOTION,
+		/**
+		 * Joystick hat position change
+		 */
+		JOYHATMOTION,
+		/**
+		 * Joystick button pressed
+		 */
+		JOYBUTTONDOWN,
+		/**
+		 * A new joystick has been inserted into the system
+		 */
+		JOYDEVICEADDED,
+		/**
+		 * An opened joystick has been removed
+		 */
+		JOYDEVICEREMOVED,
+		/**
+		 * Game controller axis motion
+		 */
+		CONTROLLERAXISMOTION,
+		/**
+		 * Game controller button pressed
+		 */
+		CONTROLLERBUTTONDOWN,
+		/**
+		 * Game controller button released
+		 */
+		SDL_CONTROLLERBUTTONUP,
+		/**
+		 * A new Game controller has been inserted into the system
+		 */
+		CONTROLLERDEVICEADDED,
+		/**
+		 * An opened Game controller has been removed
+		 */
+		CONTROLLERDEVICEREMOVED,
+		/**
+		 * The controller mapping was updated
+		 */
+		CONTROLLERDEVICEREMAPPED,
+		FINGERDOWN, FINGERUP, FINGERMOTION, DOLLARGESTURE, DOLLARRECORD, MULTIGESTURE,
+		/**
+		 * The clipboard changed
+		 */
+		CLIPBOARDUPDATE,
+		/**
+		 * The system requests a file open
+		 */
+		DROPFILE,
+		/**
+		 * The render targets have been reset
+		 */
+		RENDER_TARGETS_RESET;
+	}
+
+	/**
+	 * Common data every event shares.
+	 */
+	[CCode (cname="SDL_CommonEvent", cheader_filename="SDL2/events.h", has_type_id=false)]
+	public struct CommonEvent {
+		public EventType type;
+		public uint32 timestamp;
+	}
+
+	/**
+	 * A structure that contains the "quit requested" event.
+	 */
+	[CCode (cname="SDL_QuitEvent", has_type_id=false)]
+	public struct QuitEvent : CommonEvent {}
+
+	[CCode (cname="SDL_Event", cheader_filename="SDL2/SDL_events.h", destroy_function="", has_type_id=false)]
+	[SimpleType]
+	public struct Event {
+		/**
+		 * Event type, shared with all events
+		 */
+		public EventType type;
+
+		/**
+		 * Event type, shared with all events
+		 */
+		public CommonEvent generic;
+
+		/**
+		 * Use this function to poll for currently pending events.
+		 *
+		 * @param e The Event to be filled with the next event from the queue.
+		 *
+		 * @return 1 if there are any pending events, or 0 if there are none available.
+		 */
+		[CCode (cname="SDL_PollEvent")]
+		public static int poll(out Event e);
 	}
 }
 
