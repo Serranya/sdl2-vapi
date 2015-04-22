@@ -611,7 +611,7 @@ namespace SDL {
 		/**
 		 * Obtain a new Reference.
 		 */
-		public Surface up() {
+		public Surface @ref() {
 			GLib.AtomicInt.inc(ref ref_count);
 			return this;
 		}
