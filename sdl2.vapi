@@ -841,6 +841,364 @@ namespace SDL {
 	}
 
 	/**
+	 * General keyboard/mouse state definitions.
+	 */
+	[CCode (cname="Uint8", cprefix="SDL_", cheader_filename="SDL2/SDL_events.h", has_type_id=false)]
+	public enum EventState {
+		PRESSED,
+		RELEASED;
+	}
+
+	/**
+	 * An enumeration of key modifier masks.
+	 */
+	[CCode (cname="Uint16", cprefix="SDL_KMOD_", cheader_filename="SDL2/SDL_keyboard.h", has_type_id=false)]
+	public enum Keymod {
+		/**
+		 * 0 (no modifier is applicable)
+		 */
+		NONE,
+		/**
+		 * The left Shift key is down.
+		 */
+		LSHIFT,
+		/**
+		 * The right Shift key is down.
+		 */
+		RSHIFT,
+		/**
+		 * The left Ctrl (Control) key is down.
+		 */
+		LCTRL,
+		/**
+		 * The right Ctrl (Control) key is down.
+		 */
+		RCTRL,
+		/**
+		 * The left Alt key is down.
+		 */
+		LALT,
+		/**
+		 * The right Alt key is down.
+		 */
+		RALT,
+		/**
+		 * The left meta key (often Windows key) is down.
+		 */
+		LMETA,
+		/**
+		 * The right meta key (often Windows key) is down.
+		 */
+		RMETA,
+		/**
+		 * The Num Lock key (may be located on an extended keypad) is down.
+		 */
+		NUM,
+		/**
+		 * The Caps Lock key is down.
+		 */
+		CAPS,
+		/**
+		 * The AltGr key is down.
+		 */
+		MODE,
+		/**
+		 * (LCTRL|RCTRL)
+		 */
+		CTRL,
+		/**
+		 * (LSHIFT|RSHIFT)
+		 */
+		SHIFT,
+		/**
+		 * (LALT|RALT)
+		 */
+		ALT,
+		/**
+		 * (LMETA|RMETA)
+		 */
+		META;
+	}
+
+	/**
+	 * The SDL keyboard scancode representation.
+	 *
+	 * Values of this type are used to represent keyboard keys, among other places
+	 * in the {@link SDL.Keysym.scancode} field of the {@link SDL.KeyboardEvent}
+	 *
+	 * The values in this enumeration are based on the USB usage page standard:
+	 * [[http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf]]
+	 */
+	[CCode (cname="SDL_Scancode", cprefix="SDK_SCANCODE_", cheader_filename="SDL2/SDL_scancode.h", has_type_id=false)]
+	public enum Scancode { //TODO documentation
+		UNKNOWN,
+		A,
+		B,
+		C,
+		D,
+		E,
+		F,
+		G,
+		H,
+		I,
+		J,
+		K,
+		L,
+		M,
+		N,
+		O,
+		P,
+		Q,
+		R,
+		S,
+		T,
+		U,
+		V,
+		W,
+		X,
+		Y,
+		Z,
+		ONE,
+		TWO,
+		THREE,
+		FOUR,
+		FIVE,
+		SIX,
+		SVEN,
+		EIGHT,
+		NINE,
+		ZERO,
+		RETURN,
+		ESCAPE,
+		BACKSPACE,
+		TAB,
+		SPACE,
+		MINUS,
+		EQUALS,
+		LEFTBRACKET,
+		RIGHTBRACKET,
+		BACKSLASH,
+		NONUSHASH,
+		SEMICOLON,
+		APOSTROPHE,
+		GRAVE,
+		COMMA,
+		PERIOD,
+		SLASH,
+		CAPSLOCK,
+		F1,
+		F2,
+		F3,
+		F4,
+		F5,
+		F6,
+		F7,
+		F8,
+		F9,
+		F10,
+		F11,
+		F12,
+		PRINTSCREEN,
+		SCROLLLOCK,
+		PAUSE,
+		INSERT,
+		HOME,
+		PAGEUP,
+		DELETE,
+		END,
+		PAGEDOWN,
+		RIGHT,
+		LEFT,
+		DOWN,
+		UP,
+		NUMLOCKCLEAR,
+		KP_DIVIDE,
+		KP_MULTIPLY,
+		KP_MINUS,
+		KP_PLUS,
+		KP_ENTER,
+		KP_1,
+		KP_2,
+		KP_3,
+		KP_4,
+		KP_5,
+		KP_6,
+		KP_7,
+		KP_8,
+		KP_9,
+		KP_0,
+		KP_PERIOD,
+		NONUSBACKSLASH,
+		APPLICATION,
+		POWER,
+		KP_EQUALS,
+		F13,
+		F14,
+		F15,
+		F16,
+		F17,
+		F18,
+		F19,
+		F20,
+		F21,
+		F22,
+		F23,
+		F24,
+		EXECUTE,
+		HELP,
+		MENU,
+		SELECT,
+		STOP,
+		AGAIN,
+		UNDO,
+		CUT,
+		COPY,
+		PASTE,
+		FIND,
+		MUTE,
+		VOLUMEUP,
+		VOLUMEDOWN,
+		KP_COMMA,
+		KP_EQUALSAS400,
+		INTERNATIONAL1,
+		INTERNATIONAL2,
+		INTERNATIONAL3,
+		INTERNATIONAL4,
+		INTERNATIONAL5,
+		INTERNATIONAL6,
+		INTERNATIONAL7,
+		INTERNATIONAL8,
+		INTERNATIONAL9,
+		LANG1,
+		LANG2,
+		LANG3,
+		LANG4,
+		LANG5,
+		LANG6,
+		LANG7,
+		LANG8,
+		LANG9,
+		ALTERASE,
+		SYSREQ,
+		CANCEL,
+		CLEAR,
+		PRIOR,
+		RETURN2,
+		SEPARATOR,
+		OUT,
+		OPER,
+		CLEARAGAIN,
+		CRSEL,
+		EXSEL,
+		KP_00,
+		KP_000,
+		THOUSANDSSEPARATOR,
+		DECIMALSEPARATOR,
+		CURRENCYUNIT,
+		CURRENCYSUBUNIT,
+		KP_LEFTPAREN,
+		KP_RIGHTPAREN,
+		KP_LEFTBRACE,
+		KP_RIGHTBRACE,
+		KP_TAB,
+		KP_BACKSPACE,
+		KP_A,
+		KP_B,
+		KP_C,
+		KP_D,
+		KP_E,
+		KP_F,
+		KP_XOR,
+		KP_POWER,
+		KP_PERCENT,
+		KP_LESS,
+		KP_GREATER,
+		KP_AMPERSAND,
+		KP_DBLAMPERSAND,
+		KP_VERTICALBAR,
+		KP_DBLVERTICALBAR,
+		KP_COLON,
+		KP_HASH,
+		KP_SPACE,
+		KP_AT,
+		KP_EXCLAM,
+		KP_MEMSTORE,
+		KP_MEMRECALL,
+		KP_MEMCLEAR,
+		KP_MEMADD,
+		KP_MEMSUBTRACT,
+		KP_MEMMULTIPLY,
+		KP_MEMDIVIDE,
+		KP_PLUSMINUS,
+		KP_CLEAR,
+		KP_CLEARENTRY,
+		KP_BINARY,
+		KP_OCTAL,
+		KP_DECIMAL,
+		KP_HEXADECIMAL,
+		LCTRL,
+		LSHIFT,
+		LALT,
+		LGUI,
+		RCTRL,
+		RSHIFT,
+		RALT,
+		RGUI,
+		MODE,
+		AUDIONEXT,
+		AUDIOPREV,
+		AUDIOSTOP,
+		AUDIOPLAY,
+		AUDIOMUTE,
+		MEDIASELECT,
+		WWW,
+		MAIL,
+		CALCULATOR,
+		COMPUTER,
+		AC_SEARCH,
+		AC_HOME,
+		AC_BACK,
+		AC_FORWARD,
+		AC_STOP,
+		AC_REFRESH,
+		AC_BOOKMARKS,
+		BRIGHTNESSDOWN,
+		BRIGHTNESSUP,
+		DISPLAYSWITCH,
+		KBDILLUMTOGGLE,
+		KBDILLUMDOWN,
+		KBDILLUMUP,
+		EJECT,
+		SLEEP,
+		APP1,
+		APP2;
+	}
+
+	public struct Keycode {
+	}
+
+	/**
+	 * The SDL keysym structure, used in key events.
+	 */
+	[CCode (cname="SDL_Keysym", cheader_filename="SDL2/SDL_keyboard.h", destroy_function="", has_type_id=false)]
+	public struct Keysym {
+		/**
+		 * Hardware specific scancode.
+		 */
+		public Scancode scancode;
+
+		/**
+		 * SDL virtual keysym
+		 */
+//		public Keycode sym; //TODO create
+
+		/**
+		 * Current key modifiers.
+		 */
+		public Keymod mod;
+	}
+
+	/**
 	 * Common data every event shares.
 	 */
 	[CCode (cname="SDL_CommonEvent", cheader_filename="SDL2/events.h", has_type_id=false)]
@@ -851,9 +1209,51 @@ namespace SDL {
 
 	/**
 	 * A structure that contains the "quit requested" event.
+	 *
+	 * As  can be seen, the SDL_QuitEvent structure serves no useful purpose.
+	 * The event itself, on the other hand, is very important. If you filter out or ignore a quit event then it is
+	 * impossible for the user to close the window. On the other hand, if you do accept a quit event then the
+	 * application window will be closed, and screen  updates will still report success event though the application will no longer be visible.
+	 *
+	 * SDL.quit_requested will return non-zero if a quit event is pending.
 	 */
 	[CCode (cname="SDL_QuitEvent", has_type_id=false)]
 	public struct QuitEvent : CommonEvent {}
+
+	/**
+	 * Keyboard button event structure
+	 *
+	 * It is used when an event of type SDL_KEYDOWN or SDL_KEYUP is reported.
+	 *
+	 * The  type  and  state  actually  report  the  same  information,  they  just  use  different  values  to  do it!
+	 * A keyboard event occurs when a key is released (type=SDK_KEYUP or state=SDL_RELEASED) and when a key is pressed
+	 * (type=SDL_KEYDOWN or state=SDL_PRESSED). The information on what key was pressed or released is in the keysym structure.
+	 *
+	 * Repeating {@link SDL.EventType.KEYDOWN} events will occur if key repeat is enabled (see SDL_EnableKeyRepeat).
+	 */
+	[CCode (cname="SDL_KeyboardEvent", has_type_id=false)]
+	public struct KeyboardEvent : CommonEvent {
+		/**
+		 * The window with keyboard focus, if any.
+		 */
+		[CCode (cname="windowID")]
+		public uint32 windowId;
+
+		/**
+		 * The state of the key.
+		 */
+		public EventState state;
+
+		/**
+		 * Non-zero if this is a key repeat.
+		 */
+		uint8 repeat;
+
+		/**
+		 * Contains key press information.
+		 */
+		public Keysym keysym;
+	}
 
 	[CCode (cname="SDL_Event", cheader_filename="SDL2/SDL_events.h", destroy_function="", has_type_id=false)]
 	[SimpleType]
@@ -864,9 +1264,14 @@ namespace SDL {
 		public EventType type;
 
 		/**
-		 * Event type, shared with all events
+		 * common event data
 		 */
 		public CommonEvent generic;
+
+		/**
+		 * Keyboard event data
+		 */
+		public KeyboardEvent key;
 
 		/**
 		 * Use this function to poll for currently pending events.
