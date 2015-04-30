@@ -621,7 +621,7 @@ namespace SDL {
 		 *
 		 * @param file The file containing an BMP image.
 		 *
-		 * @return Returns a new Surface or NULL if there was an error. Call SDL.get_error() for more information.
+		 * @return Returns a new Surface or null if there was an error. Call SDL.get_error() for more information.
 		 */
 		[CCode (cname="SDL_LoadBMP")]
 		public static Surface? load_bmp(string file);
@@ -677,6 +677,20 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_BlitSurface", cheader_filename="SDL2/SDL.h")]
 		public int blit(Rectangle? srcrect, Surface dst, Rectangle? dstrect);
+
+		/**
+		 * Use this function to copy an existing {@link Surface} into a new one that is optimized for blitting to a surface of a specified {@link PixelFormat}.
+		 *
+		 * This function is used to optimize images for faster repeat blitting. This is accomplished by converting the original
+		 * and storing the result as a new surface. The new, optimized surface can then be used as the source for future blits, making them faster.
+		 *
+		 * @param fmt The pixel format that the new surface is optimized for.
+		 * @param flags = The flags are unused and should be set to 0. This is a leftover from SDL 1.2's API.
+		 *
+		 * @return Returns the new Surface that is created or null if it fails. Call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_ConvertSurface", cheader_filename="SDL/SDL.h")]
+		public Surface? convert(PixelFormat fmt, uint32 flags = 0);
 
 		/**
 		 * Use this function to perform a fast fill of a rectangle with a specific color.
