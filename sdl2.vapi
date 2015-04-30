@@ -658,9 +658,9 @@ namespace SDL {
 		 * }
 		 * }}}
 		 *
-		 * @param srcrect The Rectangle representing the rectangle to be copied, or null to copy the entire surface.
-		 * @param dst The Surface that is the blit target.
-		 * @param dstrect The Rectangle representing the the rectangle that is copied into.
+		 * @param srcrect The {@link Rectangle} representing the rectangle to be copied, or null to copy the entire surface.
+		 * @param dst The {@link Surface} that is the blit target.
+		 * @param dstrect The {@link Rectangle} representing the the rectangle that is copied into.
 		 *
 		 * @return If the blit is successful, it returns 0, otherwise it returns -1.
 		 * If either of the surfaces were in video memory, and the blit returns -2, the video memory was lost, so it should be reloaded with artwork and re-blitted:
@@ -677,6 +677,18 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_BlitSurface", cheader_filename="SDL2/SDL.h")]
 		public int blit(Rectangle? srcrect, Surface dst, Rectangle? dstrect);
+
+		/**
+		 * Use this function to perform a scaled surface copy to a destination surface.
+		 *
+		 * @param srcrect The {@link Rectangle} representing the rectangle to be copied, or null to copy the entire surface.
+		 * @param dst The Surface that is the blit target.
+		 * @param dstrect The {@link Rectangle} representing the rectangle that is copied into, or null to copy into the entire surface.
+		 *
+		 * @return 0 on success or a negative error code on failure; call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_BlitScaled")]
+		public int blit_scaled(Rectangle? srcrect, Surface dst, Rectangle? dstrect);
 
 		/**
 		 * Use this function to copy an existing {@link Surface} into a new one that is optimized for blitting to a surface of a specified {@link PixelFormat}.
