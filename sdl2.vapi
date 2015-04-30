@@ -1447,7 +1447,7 @@ namespace SDL {
 		/**
 		 * SDL virtual keysym
 		 */
-		public Keycode sym; //TODO create
+		public Keycode sym;
 
 		/**
 		 * Current key modifiers.
