@@ -146,6 +146,44 @@ namespace SDL {
 	[CCode (cname="SDL_GetError")]
 	public static unowned string get_error();
 
+
+	/**
+	 * The blend mode used in {@link Renderer.copy} and drawing operations.
+	 */
+	[CCode (cname="SDL_BlendMode", cprefix="SDL_BLENDMODE_")]
+	public enum BlendMode {
+		/**
+		 * No blending.
+		 *
+		 * dstRGBA = srcRGBA
+		 */
+		NONE,
+		/**
+		 * Alpha blending.
+		 *
+		 * dstRGB = (srcRGB * srcA) + (dstRGB * (1-srcA))
+		 *
+		 * dstA = srcA + (dstA * (1-srcA))
+		 */
+		BLEND,
+		/**
+		 * Additive blending.
+		 *
+		 * dstRGB = (srcRGB * srcA) + dstRGB
+		 *
+		 * dstA = dstA
+		 */
+		ADD,
+		/**
+		 * Color modulate
+		 *
+		 * dstRGB = srcRGB * dstRGB
+		 *
+		 * dstA = dstA
+		 */
+		MOD;
+	}
+
 	public class Hints {
 
 		/**
@@ -812,6 +850,18 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_CreateTextureFromSurface")]
 		public static Texture? create_from_surface(Renderer renderer, Surface surface);
+
+		/**
+		 * Set the blend mode used for texture copy operations.
+		 *
+		 * If the blend mode is not supported, the closest supported mode is chosen.
+		 *
+		 * @param blendMode {@link BlendMode} to use for texture blending.
+		 *
+		 * @return 0 on success, or -1 if the texture is not valid or the blend mode is not supported.
+		 */
+		[CCode (cname="SDL_SetTextureBlendMode")]
+		public int set_blendmode(BlendMode blendMode);
 
 		/**
 		 * Set an additional color value used in render copy operations.
