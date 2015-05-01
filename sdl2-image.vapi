@@ -12,7 +12,7 @@ namespace SDLImage {
 		PNG,
 		TIF,
 		WEBP,
-		[CCode (cname = "IMG_INIT_JPG|IMG_INIT_PNG|IMG_INIT_TIF|IMG_INIT_WEBP")]
+		[CCode (cname="IMG_INIT_JPG|IMG_INIT_PNG|IMG_INIT_TIF|IMG_INIT_WEBP")]
 		ALL;
 	}
 
@@ -32,7 +32,7 @@ namespace SDLImage {
 	 *
 	 * @return a bitmask of all the currently initted image loaders.
 	 */
-	[CCode (cname = "IMG_Init")]
+	[CCode (cname="IMG_Init")]
 	public static int init(int flags);
 
 	/**
@@ -40,8 +40,18 @@ namespace SDLImage {
 	 * either by {@link init} or loading an image with dynamic support required. You may call this function when load functions are no longer
 	 * needed for the JPG, PNG, and TIF image formats. You only need to call this function once, no matter how many times {@link init} was called.
 	 */
-	[CCode (cname = "IMG_Quit")]
+	[CCode (cname="IMG_Quit")]
 	public static void quit();
+
+	/**
+	 * This is the same as {@link SDL.get_error}, which returns the last error set
+	 * as a string which you may use to tell the user what happened when an error status
+	 * has been returned from an SDLIimage function call.
+	 *
+	 * @return A string containing a human readble version or the reason for the last error that occured.
+	 */
+	[CCode (cname="IMG_GetError")]
+	public unowned string get_error();
 
 	/**
 	 * Load file for use as an image in a new surface. This actually calls {@link load_typed_rw}, with the file extension used as the type string.
