@@ -810,6 +810,16 @@ namespace SDL {
 	}
 
 	/**
+	 * The structure that defines a point.
+	 */
+	[CCode (cname="SDL_Point", cheader_filename="SDL2/SDL_rect.h")]
+	[SimpleType]
+	public struct Point {
+		public int x;
+		public int y;
+	}
+
+	/**
 	 * A structure that defines a rectangle, with the origin at the upper left.
 	 */
 	[CCode (cheader_filename="SDL2/SDL_rect.h", cname="SDL_Rect", has_type_id=false)]
@@ -1020,6 +1030,29 @@ namespace SDL {
 		public int update_surface();
 	}
 
+	/**
+	 * Flip constants for {@link Renderer.copy_ex}.
+	 */
+	[CCode (cname="SDL_RendererFlip", cprefix="SDL_FLIP_", cheader_filename="SDL2/SDL_render.h")]
+	[Flags]
+	public enum RendererFlip {
+		/**
+		 * Do not flip.
+		 */
+		NONE,
+		/**
+		 * Flip horizontally.
+		 */
+		HORIZONTAL,
+		/**
+		 * Flip vertically.
+		 */
+		VERTICAL;
+	}
+
+	/**
+	 * Represents rendering state.
+	 */
 	[CCode (cprefix="SDL_", cname="SDL_Renderer", free_function="SDL_DestroyRenderer", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
 	[Compact]
 	public class Renderer {
@@ -1081,6 +1114,21 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_RenderCopy")]
 		public int copy(Texture texture, Rectangle? srcrect, Rectangle? dstrect);
+
+		/**
+		 * Copy a portion of the source texture to the current rendering target, rotating it by angle around the given center.
+		 *
+		 * @param texture The source texture.
+		 * @param srcrect The source rectangle, or null for the entire texture.
+		 * @param dstrect The destination rectangle, or null for the entire rendering target.
+		 * @param angle An angle in degrees that indicates the rotation that will be applied to dstrect.
+		 * @param center A point indicating the point around which dstrect will be rotated (if null, rotation will be done aroud dstrect.w/2, dstrect.h/2)
+		 * @param flip An {@link RendererFlip} value stating which flipping actions should be performed on the texture.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderCopyEx")]
+		public int copy_ex(Texture texture, Rectangle? srcrect, Rectangle dstrect, double angle, Point? center, RendererFlip flip);
 
 		/**
 		 * Draw a line on the current rendering target.
