@@ -1036,7 +1036,7 @@ namespace SDL {
 		/**
 		 * Draw a rectangle on the current rendering target.
 		 *
-		 * @param rect The destination rectangle, or NULL to outline the entire rendering target.
+		 * @param rect The destination rectangle, or null to outline the entire rendering target.
 		 *
 		 * @return 0 on success, or -1 on error.
 		 */
@@ -1072,6 +1072,19 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_SetRenderDrawColor")]
 		public int set_draw_color(uint8 r, uint8 g, uint8 b, uint8 a);
+
+		/**
+		 * Set the drawing area for rendering on the current target.
+		 *
+		 * If the window associated with the renderer is resized, the viewport is automatically reset.
+		 *
+		 * @param rect The rectangle representing the drawing area, or null to set the viewport to the entire target.
+		 *             The x,y of the viewport rect represents the origin for rendering.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderSetViewport")]
+		public int set_viewport(Rectangle rect);
 	}
 
 	[CCode (cname="SDL_TimerID", ref_function="", unref_function="", cheader_filename="SDL2/SDL_timer.h", has_type_id=false)]
