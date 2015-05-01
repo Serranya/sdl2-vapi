@@ -1839,31 +1839,57 @@ namespace SDL {
 		CARET,
 		UNDERSCORE,
 		BACKQUOTE,
+		[CCode (cname="SDLK_a")]
 		A,
+		[CCode (cname="SDLK_b")]
 		B,
+		[CCode (cname="SDLK_c")]
 		C,
+		[CCode (cname="SDLK_d")]
 		D,
+		[CCode (cname="SDLK_e")]
 		E,
+		[CCode (cname="SDLK_f")]
 		F,
+		[CCode (cname="SDLK_g")]
 		G,
+		[CCode (cname="SDLK_h")]
 		H,
+		[CCode (cname="SDLK_i")]
 		I,
+		[CCode (cname="SDLK_j")]
 		J,
+		[CCode (cname="SDLK_k")]
 		K,
+		[CCode (cname="SDLK_l")]
 		L,
+		[CCode (cname="SDLK_m")]
 		M,
+		[CCode (cname="SDLK_n")]
 		N,
+		[CCode (cname="SDLK_o")]
 		O,
+		[CCode (cname="SDLK_p")]
 		P,
+		[CCode (cname="SDLK_q")]
 		Q,
+		[CCode (cname="SDLK_r")]
 		R,
+		[CCode (cname="SDLK_s")]
 		S,
+		[CCode (cname="SDLK_t")]
 		T,
+		[CCode (cname="SDLK_o")]
 		U,
+		[CCode (cname="SDLK_v")]
 		V,
+		[CCode (cname="SDLK_w")]
 		W,
+		[CCode (cname="SDLK_x")]
 		X,
+		[CCode (cname="SDLK_y")]
 		Y,
+		[CCode (cname="SDLK_z")]
 		Z,
 		CAPSLOCK,
 		F1,
