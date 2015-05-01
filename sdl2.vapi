@@ -1268,6 +1268,17 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_FillRect")]
 		public int fill_rect(Rectangle? rect, uint32 color);
+
+		/**
+		 * Sets the color key (transparent pixel) in a blittable surface.
+		 *
+		 * @param flag enable or disable color key.
+		 * @param key The transparent pixel in the native surface format.
+		 *
+		 * @return 0 on success, or -1 if the surface is not valid.
+		 */
+		[CCode (cname="SDL_SetColorKey")]
+		public int set_colorkey(bool flag, uint32 key);
 	}
 
 	[CCode (cname="SDL_EventType", cprefix="SDL_", cheader_filename="SDL2/SDL_events.h")]
