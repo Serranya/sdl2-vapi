@@ -852,6 +852,16 @@ namespace SDL {
 		public static Texture? create_from_surface(Renderer renderer, Surface surface);
 
 		/**
+		 * Set an additional alpha value used in render copy operations.
+		 *
+		 * @param alpha The alpha value multiplied into copy operations.
+		 *
+		 * @return 0 on success, or -1 if the texture is not valid or alpha modulation is not supported.
+		 */
+		[CCode (cname="SDL_SetTextureAlphaMod")]
+		public int set_alpha(uint8 alpha);
+
+		/**
 		 * Set the blend mode used for texture copy operations.
 		 *
 		 * If the blend mode is not supported, the closest supported mode is chosen.
