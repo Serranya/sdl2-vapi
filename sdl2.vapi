@@ -932,7 +932,7 @@ namespace SDL {
 		public int update_surface();
 	}
 
-	[CCode (cprefix="SDL_", cname="SDL_Renderer", free_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
+	[CCode (cprefix="SDL_", cname="SDL_Renderer", free_function="SDL_DestroyRenderer", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
 	[Compact]
 	public class Renderer {
 
