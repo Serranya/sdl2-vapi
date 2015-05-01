@@ -812,6 +812,19 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_CreateTextureFromSurface")]
 		public static Texture? create_from_surface(Renderer renderer, Surface surface);
+
+		/**
+		 * Set an additional color value used in render copy operations.
+		 *
+		 * @param r The red color value multiplied into copy operations.
+		 * @param g The green color value multiplied into copy operations.
+		 * @param b TThe blue color value multiplied into copy operations.
+		 *
+		 * @return 0 on success, or -1 if the texture is not valid or color modulation
+		 *          is not supported.
+		 */
+		[CCode (cname="SDL_SetTextureColorMod")]
+		public int set_color_mod(uint8 r, uint8 g, uint8 b);
 	}
 
 	[CCode (cprefix="SDL_", cname="SDL_Window", free_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
