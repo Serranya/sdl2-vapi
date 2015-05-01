@@ -1010,6 +1010,50 @@ namespace SDL {
 		public int copy(Texture texture, Rectangle? srcrect, Rectangle? dstrect);
 
 		/**
+		 * Draw a line on the current rendering target.
+		 *
+		 * @param x1 The x coordinate of the start point.
+		 * @param y1 The y coordinate of the start point.
+		 * @param x2 The x coordinate of the end point.
+		 * @param y2 The y coordinate of the end point.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderDrawLine")]
+		public int draw_line(int x1, int y1, int x2, int y2);
+
+		/**
+		 * Draw a point on the current rendering target.
+		 *
+		 * @param x The x coordinate of the point.
+		 * @param y The y coordinate of the point.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderDrawPoint")]
+		public int draw_point(int x, int y);
+
+		/**
+		 * Draw a rectangle on the current rendering target.
+		 *
+		 * @param rect The destination rectangle, or NULL to outline the entire rendering target.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderDrawRect")]
+		public int draw_rect(Rectangle rect);
+
+		/**
+		 * Fill a rectangle on the current rendering target with the drawing color.
+		 *
+		 * @param rect The destination rectangle, or null for the entire rendering target.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderFillRect")]
+		public int fill_rect(Rectangle rect);
+
+		/**
 		 * Use this function to update the screen with any rendering performed since the previous call.
 		 */
 		[CCode (cname="SDL_RenderPresent")]
