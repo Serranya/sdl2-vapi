@@ -799,6 +799,21 @@ namespace SDL {
 
 	}
 
+	[CCode (cname="SDL_Texture", free_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h")]
+	[Compact]
+	public class Texture {
+		/**
+		 * Create a texture from an existing surface.
+		 *
+		 * @param renderer The renderer.
+		 * @param surface The surface containing pixel data used to fill the texture.
+		 *
+		 * @return The created texture is returned, or null on error.
+		 */
+		[CCode (cname="SDL_CreateTextureFromSurface")]
+		public static Texture? create_from_surface(Renderer renderer, Surface surface);
+	}
+
 	[CCode (cprefix="SDL_", cname="SDL_Window", free_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
 	[Compact]
 	public class Window {
@@ -980,6 +995,19 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_RenderClear")]
 		public int clear();
+
+
+		/**
+		 * Copy a portion of the texture to the current rendering target.
+		 *
+		 * @param texture The source texture.
+		 * @param srcrect The source rectangle, or null for the entire texture.
+		 * @param dstrect The destination rectangle, or null for the entire rendering target. The texture will be stretched to fill the given rectangle.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderCopy")]
+		public int copy(Texture texture, Rectangle? srcrect, Rectangle? dstrect);
 
 		/**
 		 * Use this function to update the screen with any rendering performed since the previous call.
