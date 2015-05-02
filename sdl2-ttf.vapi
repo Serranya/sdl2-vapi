@@ -54,4 +54,33 @@ namespace SDLTTF {
 	 */
 	[CCode (cname="TTF_GetError")]
 	public unowned string get_error();
+
+	[CCode (cname="TTF_Font", free_function="TTF_CloseFont")]
+	[Compact]
+	public class Font {
+
+		/**
+		 * Load file for use as a font, at ptsize size.
+		 *
+		 * This is actually Font.open_index(file, ptsize, 0). This can load TTF and FON files.
+		 *
+		 * @param file File name to load font from.
+		 * @param ptsize Point size (based on 72DPI) to load font as. This basically translates to pixel height.
+		 *
+		 * @return The {@link Font} or null on errors.
+		 */
+		[CCode (cname="TTF_OpenFont")]
+		public static Font? open(string file, int ptsize);
+
+		/**
+		 * Render the LATIN1 encoded text with fg color onto a new surface, using the Solid mode.
+		 *
+		 * @param text The LATIN1 null terminated string to render.
+		 * @param fg The color to render the text in. This becomes colormap index 1.
+		 *
+		 * @return A new {@link SDL.Surface}. null is returned on errors.
+		 */
+		[CCode (cname="TTF_RenderText_Solid")]
+		public SDL.Surface? render(string text, SDL.Color fg);
+	}
 }
