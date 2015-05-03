@@ -2003,7 +2003,7 @@ namespace SDL {
 		S,
 		[CCode (cname="SDLK_t")]
 		T,
-		[CCode (cname="SDLK_o")]
+		[CCode (cname="SDLK_u")]
 		U,
 		[CCode (cname="SDLK_v")]
 		V,
