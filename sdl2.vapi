@@ -743,6 +743,153 @@ namespace SDL {
 //    \ \  / / _  __| | ___  ___(_)
 //     \ \/ / | |/ _` |/ _ \/ _ \
 //      \  /  | | (_| |  __/ (_) |
+//    ___\/  _|_|\__,_|\___|\___(_)                      _  __          ___           _                 __  __                                                   _
+//   |  __ \(_)         | |                             | | \ \        / (_)         | |               |  \/  |                                                 | |
+//   | |  | |_ ___ _ __ | | __ _ _   _    __ _ _ __   __| |  \ \  /\  / / _ _ __   __| | _____      __ | \  / | __ _ _ __   __ _  __ _  ___ _ __ ___   ___ _ __ | |_
+//   | |  | | / __| '_ \| |/ _` | | | |  / _` | '_ \ / _` |   \ \/  \/ / | | '_ \ / _` |/ _ \ \ /\ / / | |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '_ ` _ \ / _ \ '_ \| __|
+//   | |__| | \__ \ |_) | | (_| | |_| | | (_| | | | | (_| |    \  /\  /  | | | | | (_| | (_) \ V  V /  | |  | | (_| | | | | (_| | (_| |  __/ | | | | |  __/ | | | |_
+//   |_____/|_|___/ .__/|_|\__,_|\__, |  \__,_|_| |_|\__,_|     \/  \/   |_|_| |_|\__,_|\___/ \_/\_/   |_|  |_|\__,_|_| |_|\__,_|\__, |\___|_| |_| |_|\___|_| |_|\__|
+//                | |             __/ |                                                                                           __/ |
+//                |_|            |___/                                                                                           |___/
+
+	[CCode (cprefix="SDL_", cname="SDL_Window", free_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
+	[Compact]
+	public class Window {
+
+		/**
+		 * Used to indicate that you don't care what the window position is.
+		 */
+		[CCode (cname="SDL_WINDOWPOS_UNDEFINED_MASK")]
+		public static const uint8 POS_UNDEFINED;
+
+		/**
+		 * Used to indicate that the window position should be centered.
+		 */
+		[CCode (cname="SDL_WINDOWPOS_CENTERED_MASK")]
+		public static const uint8 POS_CENTERED;
+
+		/**
+		 * The flags on a window.
+		 */
+		[CCode (cname="SDL_WindowFlags", cprefix="SDL_WINDOW_", has_type_id=false)]
+		[Flags]
+		public enum Flags {
+			/**
+			 * Fullscreen window.
+			 */
+			FULLSCREEN,
+			/**
+			 * Window usable with OpenGL context.
+			 */
+			OPENGL,
+			/**
+			 * Window is visible.
+			 */
+			SHOWN,
+			/**
+			 * Window is not visible.
+			 */
+			HIDDEN,
+			/**
+			 * no window decoration.
+			 */
+			BORDERLESS,
+			/**
+			 * Window can be resized.
+			 */
+			RESIZABLE,
+			/**
+			 * Window is minimized.
+			 */
+			MINIMIZED,
+			/**
+			 * Window is maximized.
+			 */
+			MAXIMIZED,
+			/**
+			 * Window has grabbed input focus.
+			 */
+			INPUT_GRABBED,
+			/**
+			 * Window has input focus.
+			 */
+			INPUT_FOCUS,
+			/**
+			 * Window has mouse focus.
+			 */
+			MOUSE_FOCUS,
+			/**
+			 * Fullscreen window at the current desktop resolution.
+			 */
+			FULLSCREEN_DESKTOP,
+			/**
+			 * Window not created by SDL.
+			 */
+			FOREIGN,
+			/**
+			 * Window should be created in high-DPI mode if supported (>= SDL 2.0.1).
+			 */
+			ALLOW_HIGHDPI
+		}
+
+		/**
+		 * Use this function to create a window with the specified position, dimensions, and flags.
+		 *
+		 * @param title the title of the window.
+		 * @param x the x position of the window, {@link SDL.Window.POS_CENTERED} or {@link SDL.Window.POS_UNDEFINED}.
+		 * @param y the y position of the window, {@link SDL.Window.POS_CENTERED} or {@link SDL.Window.POS_UNDEFINED}.
+		 * @param w the width of the window.
+		 * @param h the height of the window.
+		 * @param flags 0, or one or more of the following {@link SDL.Window.Flags} OR'd together:
+		 * FULLSCREEN
+		 * ,FULLSCREEN_DESKTOP
+		 * ,OPENGL
+		 * ,HIDDEN
+		 * ,BORDERLESS
+		 * ,RESIZABLE
+		 * ,MINIMIZED
+		 * ,MAXIMIZED
+		 * ,INPUT_GRABBED
+		 * ,ALLOW_HIGHDPI
+		 *
+		 * @return Returns the window that was created or null on failure; call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_CreateWindow")]
+		public static Window? create(string title, int x, int y, int w, int h, uint32 flags);
+
+		/**
+		 * Use this function to get the size of a window's client area.
+		 *
+		 * null can safely be passed as the w or h parameter if the width or height value is not desired.
+		 *
+		 * @param w will be filled with the width of the window.
+		 * @param h will be filled with the height of the window.
+		 */
+		[CCode (cname="SDL_GetWindowSize")]
+		public void get_size(out int w, out int h);
+
+		/**
+		 * Use this function to get the {@link SDL.Surface} associated with the window.
+		 *
+		 * @return Returns the surface associated with the window, or null on failure; call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_GetWindowSurface")]
+		public unowned Surface? get_surface();
+
+		/**
+		 * Use this function to copy the window surface to the screen.
+		 *
+		 * @return Returns 0 on success or a negative error code on failure; call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_UpdateWindowSurface")]
+		public int update_surface();
+	}
+
+//   __      ___     _
+//   \ \    / (_)   | |          _
+//    \ \  / / _  __| | ___  ___(_)
+//     \ \/ / | |/ _` |/ _ \/ _ \
+//      \  /  | | (_| |  __/ (_) |
 //    ___\/___|_|\__,_|\___|\___(_)      _                _           _   _____                _           _
 //   |__ \|  __ \      /\               | |              | |         | | |  __ \              | |         (_)
 //      ) | |  | |    /  \   ___ ___ ___| | ___ _ __ __ _| |_ ___  __| | | |__) |___ _ __   __| | ___ _ __ _ _ __   __ _
@@ -1022,7 +1169,19 @@ namespace SDL {
 		public int set_color_mod(uint8 r, uint8 g, uint8 b);
 	}
 
-	//TODO assign to categories
+//   __      ___     _
+//   \ \    / (_)   | |          _
+//    \ \  / / _  __| | ___  ___(_)
+//     \ \/ / | |/ _` |/ _ \/ _ \
+//      \  /  | | (_| |  __/ (_) |
+//    ___\/ _ |_|\__,_|\___|\___(_)                       _                         _    _____                              _               _____             _   _
+//   |  __ (_)        | | |  ____|                       | |                       | |  / ____|                            (_)             |  __ \           | | (_)
+//   | |__) |__  _____| | | |__ ___  _ __ _ __ ___   __ _| |_ ___    __ _ _ __   __| | | |     ___  _ ____   _____ _ __ ___ _  ___  _ __   | |__) |___  _   _| |_ _ _ __   ___  ___
+//   |  ___/ \ \/ / _ \ | |  __/ _ \| '__| '_ ` _ \ / _` | __/ __|  / _` | '_ \ / _` | | |    / _ \| '_ \ \ / / _ \ '__/ __| |/ _ \| '_ \  |  _  // _ \| | | | __| | '_ \ / _ \/ __|
+//   | |   | |>  <  __/ | | | | (_) | |  | | | | | | (_| | |_\__ \ | (_| | | | | (_| | | |___| (_) | | | \ V /  __/ |  \__ \ | (_) | | | | | | \ \ (_) | |_| | |_| | | | |  __/\__ \
+//   |_|   |_/_/\_\___|_| |_|  \___/|_|  |_| |_| |_|\__,_|\__|___/  \__,_|_| |_|\__,_|  \_____\___/|_| |_|\_/ \___|_|  |___/_|\___/|_| |_| |_|  \_\___/ \__,_|\__|_|_| |_|\___||___/
+//
+//
 
 	/**
 	 * These define alpha as the opacity of a surface.
@@ -1031,22 +1190,6 @@ namespace SDL {
 	public enum Alpha {
 		OPAQUE,
 		TRANSPARENT
-	}
-
-	[CCode (cname="SDL_Cursor", free_function="SDL_FreeCursor", cheader_filename="SDL2/SDL_mouse.h")]
-	[Compact]
-	public class Cursor {
-
-		/**
-		 * Use this function to retrieve the current state of the mouse.
-		 *
-		 * @param x The x coordinate of the mouse cursor position relative to the focus window.
-		 * @param y The y coordinate of the mouse cursor position relative to the focus window.
-		 *
-		 * @return The button bitmask of the current button state.
-		 */
-		[CCode (cname="SDL_GetMouseState")]
-		public static uint32 get_state(out int x, out int y);
 	}
 
 	/**
@@ -1213,6 +1356,20 @@ namespace SDL {
 		YVYU
 	}
 
+//   __      ___     _
+//   \ \    / (_)   | |          _
+//    \ \  / / _  __| | ___  ___(_)
+//     \ \/ / | |/ _` |/ _ \/ _ \
+//      \  /  | | (_| |  __/ (_) |
+//    ___\/   |_|\__,_|\___|\___(_)        _        ______                _   _
+//   |  __ \         | |                  | |      |  ____|              | | (_)
+//   | |__) |___  ___| |_ __ _ _ __   __ _| | ___  | |__ _   _ _ __   ___| |_ _  ___  _ __  ___
+//   |  _  // _ \/ __| __/ _` | '_ \ / _` | |/ _ \ |  __| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+//   | | \ \  __/ (__| || (_| | | | | (_| | |  __/ | |  | |_| | | | | (__| |_| | (_) | | | \__ \
+//   |_|  \_\___|\___|\__\__,_|_| |_|\__, |_|\___| |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+//                                    __/ |
+//                                   |___/
+
 	/**
 	 * The structure that defines a point.
 	 */
@@ -1251,157 +1408,19 @@ namespace SDL {
 
 	}
 
-
-	[CCode (cprefix="SDL_", cname="SDL_Window", free_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
-	[Compact]
-	public class Window {
-
-		/**
-		 * Used to indicate that you don't care what the window position is.
-		 */
-		[CCode (cname="SDL_WINDOWPOS_UNDEFINED_MASK")]
-		public static const uint8 POS_UNDEFINED;
-
-		/**
-		 * Used to indicate that the window position should be centered.
-		 */
-		[CCode (cname="SDL_WINDOWPOS_CENTERED_MASK")]
-		public static const uint8 POS_CENTERED;
-
-		/**
-		 * The flags on a window.
-		 */
-		[CCode (cname="SDL_WindowFlags", cprefix="SDL_WINDOW_", has_type_id=false)]
-		[Flags]
-		public enum Flags {
-			/**
-			 * Fullscreen window.
-			 */
-			FULLSCREEN,
-			/**
-			 * Window usable with OpenGL context.
-			 */
-			OPENGL,
-			/**
-			 * Window is visible.
-			 */
-			SHOWN,
-			/**
-			 * Window is not visible.
-			 */
-			HIDDEN,
-			/**
-			 * no window decoration.
-			 */
-			BORDERLESS,
-			/**
-			 * Window can be resized.
-			 */
-			RESIZABLE,
-			/**
-			 * Window is minimized.
-			 */
-			MINIMIZED,
-			/**
-			 * Window is maximized.
-			 */
-			MAXIMIZED,
-			/**
-			 * Window has grabbed input focus.
-			 */
-			INPUT_GRABBED,
-			/**
-			 * Window has input focus.
-			 */
-			INPUT_FOCUS,
-			/**
-			 * Window has mouse focus.
-			 */
-			MOUSE_FOCUS,
-			/**
-			 * Fullscreen window at the current desktop resolution.
-			 */
-			FULLSCREEN_DESKTOP,
-			/**
-			 * Window not created by SDL.
-			 */
-			FOREIGN,
-			/**
-			 * Window should be created in high-DPI mode if supported (>= SDL 2.0.1).
-			 */
-			ALLOW_HIGHDPI
-		}
-
-		/**
-		 * Use this function to create a window with the specified position, dimensions, and flags.
-		 *
-		 * @param title the title of the window.
-		 * @param x the x position of the window, {@link SDL.Window.POS_CENTERED} or {@link SDL.Window.POS_UNDEFINED}.
-		 * @param y the y position of the window, {@link SDL.Window.POS_CENTERED} or {@link SDL.Window.POS_UNDEFINED}.
-		 * @param w the width of the window.
-		 * @param h the height of the window.
-		 * @param flags 0, or one or more of the following {@link SDL.Window.Flags} OR'd together:
-		 * FULLSCREEN
-		 * ,FULLSCREEN_DESKTOP
-		 * ,OPENGL
-		 * ,HIDDEN
-		 * ,BORDERLESS
-		 * ,RESIZABLE
-		 * ,MINIMIZED
-		 * ,MAXIMIZED
-		 * ,INPUT_GRABBED
-		 * ,ALLOW_HIGHDPI
-		 *
-		 * @return Returns the window that was created or null on failure; call SDL.get_error() for more information.
-		 */
-		[CCode (cname="SDL_CreateWindow")]
-		public static Window? create(string title, int x, int y, int w, int h, uint32 flags);
-
-		/**
-		 * Use this function to get the size of a window's client area.
-		 *
-		 * null can safely be passed as the w or h parameter if the width or height value is not desired.
-		 *
-		 * @param w will be filled with the width of the window.
-		 * @param h will be filled with the height of the window.
-		 */
-		[CCode (cname="SDL_GetWindowSize")]
-		public void get_size(out int w, out int h);
-
-		/**
-		 * Use this function to get the {@link SDL.Surface} associated with the window.
-		 *
-		 * @return Returns the surface associated with the window, or null on failure; call SDL.get_error() for more information.
-		 */
-		[CCode (cname="SDL_GetWindowSurface")]
-		public unowned Surface? get_surface();
-
-		/**
-		 * Use this function to copy the window surface to the screen.
-		 *
-		 * @return Returns 0 on success or a negative error code on failure; call SDL.get_error() for more information.
-		 */
-		[CCode (cname="SDL_UpdateWindowSurface")]
-		public int update_surface();
-	}
-
-
-
-
-	[CCode (cname="SDL_TimerID", ref_function="", unref_function="", cheader_filename="SDL2/SDL_timer.h", has_type_id=false)]
-	[Compact]
-	public class Timer {
-
-		/**
-		 * Use this function to wait a specified number of milliseconds before returning.
-		 *
-		 * It waits at least the specified time, but possibly longer due to OS scheduling.
-		 *
-		 * @param ms The number of milliseconds to delay.
-		 */
-		[CCode (cname="SDL_Delay")]
-		public static void delay(uint32 ms);
-	}
+//   __      ___     _
+//   \ \    / (_)   | |          _
+//    \ \  / / _  __| | ___  ___(_)
+//     \ \/ / | |/ _` |/ _ \/ _ \
+//      \  /  | | (_| |  __/ (_) |
+//     __\/_  |_|\__,_|\___|\___(_)          _____                _   _                               _    _____ _                 _        _____                     _
+//    / ____|           / _|                / ____|              | | (_)                             | |  / ____(_)               | |      |  __ \                   (_)
+//   | (___  _   _ _ __| |_ __ _  ___ ___  | |     _ __ ___  __ _| |_ _  ___  _ __     __ _ _ __   __| | | (___  _ _ __ ___  _ __ | | ___  | |  | |_ __ __ ___      ___ _ __   __ _
+//    \___ \| | | | '__|  _/ _` |/ __/ _ \ | |    | '__/ _ \/ _` | __| |/ _ \| '_ \   / _` | '_ \ / _` |  \___ \| | '_ ` _ \| '_ \| |/ _ \ | |  | | '__/ _` \ \ /\ / / | '_ \ / _` |
+//    ____) | |_| | |  | || (_| | (_|  __/ | |____| | |  __/ (_| | |_| | (_) | | | | | (_| | | | | (_| |  ____) | | | | | | | |_) | |  __/ | |__| | | | (_| |\ V  V /| | | | | (_| |
+//   |_____/ \__,_|_|  |_| \__,_|\___\___|  \_____|_|  \___|\__,_|\__|_|\___/|_| |_|  \__,_|_| |_|\__,_| |_____/|_|_| |_| |_| .__/|_|\___| |_____/|_|  \__,_| \_/\_/ |_|_| |_|\__, |
+//                                                                                                                          | |                                                __/ |
+//                                                                                                                          |_|                                               |___/
 
 	/**
 	 * A collection of pixels used in software blitting.
@@ -1582,6 +1601,21 @@ namespace SDL {
 		public int set_colorkey(bool flag, uint32 key);
 	}
 
+//    _____                   _     ______               _
+//   |_   _|                 | |   |  ____|             | |      _
+//     | |  _ __  _ __  _   _| |_  | |____   _____ _ __ | |_ ___(_)
+//     | | | '_ \| '_ \| | | | __| |  __\ \ / / _ \ '_ \| __/ __|
+//    _| |_| | | | |_) | |_| | |_  | |___\ V /  __/ | | | |_\__ \_
+//   |_____|_| |_| .__/ \__,_|\__| |______\_/ \___|_| |_|\__|___(_)
+//    ______     | |       _     _    _                 _ _ _
+//   |  ____|    |_|      | |   | |  | |               | | (_)
+//   | |____   _____ _ __ | |_  | |__| | __ _ _ __   __| | |_ _ __   __ _
+//   |  __\ \ / / _ \ '_ \| __| |  __  |/ _` | '_ \ / _` | | | '_ \ / _` |
+//   | |___\ V /  __/ | | | |_  | |  | | (_| | | | | (_| | | | | | | (_| |
+//   |______\_/ \___|_| |_|\__| |_|  |_|\__,_|_| |_|\__,_|_|_|_| |_|\__, |
+//                                                                   __/ |
+//                                                                  |___/
+
 	[CCode (cname="SDL_EventType", cprefix="SDL_", cheader_filename="SDL2/SDL_events.h")]
 	public enum EventType {
 		/**
@@ -1735,6 +1769,106 @@ namespace SDL {
 		PRESSED,
 		RELEASED;
 	}
+
+	/**
+	 * Common data every event shares.
+	 */
+	[CCode (cname="SDL_CommonEvent", cheader_filename="SDL2/events.h", has_type_id=false)]
+	public struct CommonEvent {
+		public EventType type;
+		public uint32 timestamp;
+	}
+
+	/**
+	 * A structure that contains the "quit requested" event.
+	 *
+	 * As  can be seen, the SDL_QuitEvent structure serves no useful purpose.
+	 * The event itself, on the other hand, is very important. If you filter out or ignore a quit event then it is
+	 * impossible for the user to close the window. On the other hand, if you do accept a quit event then the
+	 * application window will be closed, and screen  updates will still report success event though the application will no longer be visible.
+	 *
+	 * SDL.quit_requested will return non-zero if a quit event is pending.
+	 */
+	[CCode (cname="SDL_QuitEvent", has_type_id=false)]
+	public struct QuitEvent : CommonEvent {}
+
+	/**
+	 * Keyboard button event structure
+	 *
+	 * It is used when an event of type SDL_KEYDOWN or SDL_KEYUP is reported.
+	 *
+	 * The  type  and  state  actually  report  the  same  information,  they  just  use  different  values  to  do it!
+	 * A keyboard event occurs when a key is released (type=SDK_KEYUP or state=SDL_RELEASED) and when a key is pressed
+	 * (type=SDL_KEYDOWN or state=SDL_PRESSED). The information on what key was pressed or released is in the keysym structure.
+	 *
+	 * Repeating {@link SDL.EventType.KEYDOWN} events will occur if key repeat is enabled (see SDL_EnableKeyRepeat).
+	 */
+	[CCode (cname="SDL_KeyboardEvent", has_type_id=false)]
+	public struct KeyboardEvent : CommonEvent {
+		/**
+		 * The window with keyboard focus, if any.
+		 */
+		[CCode (cname="windowID")]
+		public uint32 windowId;
+
+		/**
+		 * The state of the key.
+		 */
+		public EventState state;
+
+		/**
+		 * Non-zero if this is a key repeat.
+		 */
+		uint8 repeat;
+
+		/**
+		 * Contains key press information.
+		 */
+		public Keysym keysym;
+	}
+
+	[CCode (cname="SDL_Event", cheader_filename="SDL2/SDL_events.h", destroy_function="", has_type_id=false)]
+	[SimpleType]
+	public struct Event {
+		/**
+		 * Event type, shared with all events
+		 */
+		public EventType type;
+
+		/**
+		 * common event data
+		 */
+		public CommonEvent generic;
+
+		/**
+		 * Keyboard event data
+		 */
+		public KeyboardEvent key;
+
+		/**
+		 * Use this function to poll for currently pending events.
+		 *
+		 * @param e The Event to be filled with the next event from the queue.
+		 *
+		 * @return 1 if there are any pending events, or 0 if there are none available.
+		 */
+		[CCode (cname="SDL_PollEvent")]
+		public static int poll(out Event e);
+	}
+
+//    _____                   _     ______               _
+//   |_   _|                 | |   |  ____|             | |      _
+//     | |  _ __  _ __  _   _| |_  | |____   _____ _ __ | |_ ___(_)
+//     | | | '_ \| '_ \| | | | __| |  __\ \ / / _ \ '_ \| __/ __|
+//    _| |_| | | | |_) | |_| | |_  | |___\ V /  __/ | | | |_\__ \_
+//   |_____|_| |_| .__/ \__,_|\__| |______\_/ \___|_|_|_|\__|___(_)                    _
+//   | |/ /      | || |                       | |  / ____|                            | |
+//   | ' / ___ _ |_|| |__   ___   __ _ _ __ __| | | (___  _   _ _ __  _ __   ___  _ __| |_
+//   |  < / _ \ | | | '_ \ / _ \ / _` | '__/ _` |  \___ \| | | | '_ \| '_ \ / _ \| '__| __|
+//   | . \  __/ |_| | |_) | (_) | (_| | | | (_| |  ____) | |_| | |_) | |_) | (_) | |  | |_
+//   |_|\_\___|\__, |_.__/ \___/ \__,_|_|  \__,_| |_____/ \__,_| .__/| .__/ \___/|_|   \__|
+//              __/ |                                          | |   | |
+//             |___/                                           |_|   |_|
 
 	/**
 	 * An enumeration of key modifier masks.
@@ -2368,90 +2502,63 @@ namespace SDL {
 		public Keymod mod;
 	}
 
-	/**
-	 * Common data every event shares.
-	 */
-	[CCode (cname="SDL_CommonEvent", cheader_filename="SDL2/events.h", has_type_id=false)]
-	public struct CommonEvent {
-		public EventType type;
-		public uint32 timestamp;
+//    _____                   _     ______               _
+//   |_   _|                 | |   |  ____|             | |      _
+//     | |  _ __  _ __  _   _| |_  | |____   _____ _ __ | |_ ___(_)
+//     | | | '_ \| '_ \| | | | __| |  __\ \ / / _ \ '_ \| __/ __|
+//    _| |_| | | | |_) | |_| | |_  | |___\ V /  __/ | | | |_\__ \_
+//   |_____|_| |_| .__/ \__,_|\__| |______\_/ \___|_| |_|\__|___(_)     _
+//   |  \/  |    | |                / ____|                            | |
+//   | \  / | ___|_|   _ ___  ___  | (___  _   _ _ __  _ __   ___  _ __| |_
+//   | |\/| |/ _ \| | | / __|/ _ \  \___ \| | | | '_ \| '_ \ / _ \| '__| __|
+//   | |  | | (_) | |_| \__ \  __/  ____) | |_| | |_) | |_) | (_) | |  | |_
+//   |_|  |_|\___/ \__,_|___/\___| |_____/ \__,_| .__/| .__/ \___/|_|   \__|
+//                                              | |   | |
+//                                              |_|   |_|
+
+	[CCode (cname="SDL_Cursor", free_function="SDL_FreeCursor", cheader_filename="SDL2/SDL_mouse.h")]
+	[Compact]
+	public class Cursor {
+
+		/**
+		 * Use this function to retrieve the current state of the mouse.
+		 *
+		 * @param x The x coordinate of the mouse cursor position relative to the focus window.
+		 * @param y The y coordinate of the mouse cursor position relative to the focus window.
+		 *
+		 * @return The button bitmask of the current button state.
+		 */
+		[CCode (cname="SDL_GetMouseState")]
+		public static uint32 get_state(out int x, out int y);
 	}
 
-	/**
-	 * A structure that contains the "quit requested" event.
-	 *
-	 * As  can be seen, the SDL_QuitEvent structure serves no useful purpose.
-	 * The event itself, on the other hand, is very important. If you filter out or ignore a quit event then it is
-	 * impossible for the user to close the window. On the other hand, if you do accept a quit event then the
-	 * application window will be closed, and screen  updates will still report success event though the application will no longer be visible.
-	 *
-	 * SDL.quit_requested will return non-zero if a quit event is pending.
-	 */
-	[CCode (cname="SDL_QuitEvent", has_type_id=false)]
-	public struct QuitEvent : CommonEvent {}
+//    _______ _
+//   |__   __(_)                        _
+//      | |   _ _ __ ___   ___ _ __ ___(_)
+//      | |  | | '_ ` _ \ / _ \ '__/ __|
+//      | |  | | | | | | |  __/ |  \__ \_
+//    __|_|__|_|_| |_| |_|\___|_|  |___(_)__                              _
+//   |__   __(_)                      / ____|                            | |
+//      | |   _ _ __ ___   ___ _ __  | (___  _   _ _ __  _ __   ___  _ __| |_
+//      | |  | | '_ ` _ \ / _ \ '__|  \___ \| | | | '_ \| '_ \ / _ \| '__| __|
+//      | |  | | | | | | |  __/ |     ____) | |_| | |_) | |_) | (_) | |  | |_
+//      |_|  |_|_| |_| |_|\___|_|    |_____/ \__,_| .__/| .__/ \___/|_|   \__|
+//                                                | |   | |
+//                                                |_|   |_|
 
-	/**
-	 * Keyboard button event structure
-	 *
-	 * It is used when an event of type SDL_KEYDOWN or SDL_KEYUP is reported.
-	 *
-	 * The  type  and  state  actually  report  the  same  information,  they  just  use  different  values  to  do it!
-	 * A keyboard event occurs when a key is released (type=SDK_KEYUP or state=SDL_RELEASED) and when a key is pressed
-	 * (type=SDL_KEYDOWN or state=SDL_PRESSED). The information on what key was pressed or released is in the keysym structure.
-	 *
-	 * Repeating {@link SDL.EventType.KEYDOWN} events will occur if key repeat is enabled (see SDL_EnableKeyRepeat).
-	 */
-	[CCode (cname="SDL_KeyboardEvent", has_type_id=false)]
-	public struct KeyboardEvent : CommonEvent {
-		/**
-		 * The window with keyboard focus, if any.
-		 */
-		[CCode (cname="windowID")]
-		public uint32 windowId;
+	[CCode (cname="SDL_TimerID", ref_function="", unref_function="", cheader_filename="SDL2/SDL_timer.h", has_type_id=false)]
+	[Compact]
+	public class Timer {
 
 		/**
-		 * The state of the key.
-		 */
-		public EventState state;
-
-		/**
-		 * Non-zero if this is a key repeat.
-		 */
-		uint8 repeat;
-
-		/**
-		 * Contains key press information.
-		 */
-		public Keysym keysym;
-	}
-
-	[CCode (cname="SDL_Event", cheader_filename="SDL2/SDL_events.h", destroy_function="", has_type_id=false)]
-	[SimpleType]
-	public struct Event {
-		/**
-		 * Event type, shared with all events
-		 */
-		public EventType type;
-
-		/**
-		 * common event data
-		 */
-		public CommonEvent generic;
-
-		/**
-		 * Keyboard event data
-		 */
-		public KeyboardEvent key;
-
-		/**
-		 * Use this function to poll for currently pending events.
+		 * Use this function to wait a specified number of milliseconds before returning.
 		 *
-		 * @param e The Event to be filled with the next event from the queue.
+		 * It waits at least the specified time, but possibly longer due to OS scheduling.
 		 *
-		 * @return 1 if there are any pending events, or 0 if there are none available.
+		 * @param ms The number of milliseconds to delay.
 		 */
-		[CCode (cname="SDL_PollEvent")]
-		public static int poll(out Event e);
+		[CCode (cname="SDL_Delay")]
+		public static void delay(uint32 ms);
 	}
 }
 
