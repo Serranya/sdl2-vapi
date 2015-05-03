@@ -1,6 +1,20 @@
 [CCode (cprefix="SDL_", cheader_filename="SDL2/SDL.h")]
 namespace SDL {
 
+//    ____            _
+//   |  _ \          (_)     _
+//   | |_) | __ _ ___ _  ___(_)
+//   |  _ < / _` / __| |/ __|
+//   | |_) | (_| \__ \ | (__ _
+//   |____/ \__,_|___/_|\___(_) _ _          _   _                               _    _____ _           _      _
+//   |_   _|     (_) | (_)     | (_)        | | (_)                             | |  / ____| |         | |    | |
+//     | |  _ __  _| |_ _  __ _| |_ ______ _| |_ _  ___  _ __     __ _ _ __   __| | | (___ | |__  _   _| |_ __| | _____      ___ __
+//     | | | '_ \| | __| |/ _` | | |_  / _` | __| |/ _ \| '_ \   / _` | '_ \ / _` |  \___ \| '_ \| | | | __/ _` |/ _ \ \ /\ / / '_ \
+//    _| |_| | | | | |_| | (_| | | |/ / (_| | |_| | (_) | | | | | (_| | | | | (_| |  ____) | | | | |_| | || (_| | (_) \ V  V /| | | |
+//   |_____|_| |_|_|\__|_|\__,_|_|_/___\__,_|\__|_|\___/|_| |_|  \__,_|_| |_|\__,_| |_____/|_| |_|\__,_|\__\__,_|\___/ \_/\_/ |_| |_|
+//
+//
+
 	/**
 	 * These flags can be OR'd together.
 	 */
@@ -134,57 +148,52 @@ namespace SDL {
 	[CCode (cname="SDL_WasInit")]
 	public static uint32 was_init(uint32 flags);
 
-	/**
-	 * Use this function to retrieve a message about the last error that occurred.
-	 *
-	 * It is possible for multiple errors to occur before calling {@link get_error}.
-	 * Only the last error is returned.
-	 *
-	 * @return Returns a message with information about the specific error that occurred,
-	 * or an empty string if there hasn't been an error since the last call to {@link clear_error}.
-	 */
-	[CCode (cname="SDL_GetError")]
-	public static unowned string get_error();
-
-
-	/**
-	 * The blend mode used in {@link Renderer.copy} and drawing operations.
-	 */
-	[CCode (cname="SDL_BlendMode", cprefix="SDL_BLENDMODE_")]
-	public enum BlendMode {
-		/**
-		 * No blending.
-		 *
-		 * dstRGBA = srcRGBA
-		 */
-		NONE,
-		/**
-		 * Alpha blending.
-		 *
-		 * dstRGB = (srcRGB * srcA) + (dstRGB * (1-srcA))
-		 *
-		 * dstA = srcA + (dstA * (1-srcA))
-		 */
-		BLEND,
-		/**
-		 * Additive blending.
-		 *
-		 * dstRGB = (srcRGB * srcA) + dstRGB
-		 *
-		 * dstA = dstA
-		 */
-		ADD,
-		/**
-		 * Color modulate
-		 *
-		 * dstRGB = srcRGB * dstRGB
-		 *
-		 * dstA = dstA
-		 */
-		MOD;
-	}
+//    ____            _
+//   |  _ \          (_)     _
+//   | |_) | __ _ ___ _  ___(_)
+//   |  _ < / _` / __| |/ __|
+//   | |_) | (_| \__ \ | (__ _
+//   |____/_\__,_|___/_|\___(_)                     _   _              __      __        _       _     _
+//    / ____|           / _(_)                     | | (_)             \ \    / /       (_)     | |   | |
+//   | |     ___  _ __ | |_ _  __ _ _   _ _ __ __ _| |_ _  ___  _ __    \ \  / /_ _ _ __ _  __ _| |__ | | ___  ___
+//   | |    / _ \| '_ \|  _| |/ _` | | | | '__/ _` | __| |/ _ \| '_ \    \ \/ / _` | '__| |/ _` | '_ \| |/ _ \/ __|
+//   | |___| (_) | | | | | | | (_| | |_| | | | (_| | |_| | (_) | | | |    \  / (_| | |  | | (_| | |_) | |  __/\__ \
+//    \_____\___/|_| |_|_| |_|\__, |\__,_|_|  \__,_|\__|_|\___/|_| |_|     \/ \__,_|_|  |_|\__,_|_.__/|_|\___||___/
+//                             __/ |
+//                            |___/
 
 	public class Hints {
+
+		/**
+		 * An enumeration of hint priorities
+		 */
+		[CCode (cname="SDL_HintPriority", cprefix="SDL_HINT_")]
+		public enum Priority {
+			/**
+			 * Low priority, used for default values.
+			 */
+			DEFAULT,
+
+			/**
+			 * Medium priority.
+			 */
+			NORMAL,
+
+			/**
+			 * High priority.
+			 */
+			OVERRIDE;
+		}
+
+		/**
+		 * A callback used to watch hints.
+		 *
+		 * @param name What was passed as name to {@link Hints.add_callback}.
+		 * @param oldValue The old value.
+		 * @param newValue The new value.
+		 */
+		[CCode (cname="SDL_HintCallback", delegate_target_pos=0, has_target=true)]
+		public delegate void Callback(string name, string oldValue, string? newValue);
 
 		/**
 		 * A variable controlling how 3D acceleration is used to accelerate the SDL screen surface.
@@ -621,10 +630,47 @@ namespace SDL {
 		public const string VIDEO_MAC_FULLSCREEN_SPACES;
 
 		/**
+		 * Use this function to add a function to watch a particular hint.
+		 *
+		 * @param name The hint to watch.
+		 * @param callback The delegate to call when the hint value changes.
+		 *
+		 * @since 2.0.0
+		 */
+		[CCode (cname="SDL_AddHintCallback")]
+		public static void add_callback(string name, Callback callback);
+
+		/**
+		 * Use this function to clear all hints.
+		 *
+		 * This function is automatically called during {@link quit}.
+		 */
+		[CCode (cname="SDL_ClearHints")]
+		public static void clear();
+
+		/**
+		 * Use this function to remove a function watching a particular hint.
+		 *
+		 * @param name The hint being watched.
+		 * @param callback The delegate being called when the hint value changes.
+		 */
+		[CCode (cname ="SDL_DelHintCallback")]
+		public static void del_callback (string name, Callback callback);
+
+		/**
+		 * Use this function to get the value of a hint.
+		 *
+		 * @param name The hint to query. Use the constans from the {@link Hints} class.
+		 *
+		 * @return Returns the string value of a hint or null if the hint isn't set.
+		 */
+		public static unowned string @get(string name);
+
+		/**
 		 * Use this function to set a hint with normal priority.
 		 *
 		 * Hints will not be set if there is an existing override hint or environment
-		 * variable that takes precedence. You can use {@link set_hint_with_priority}
+		 * variable that takes precedence. You can use {@link set_with_priority}
 		 * to set the hint with override priority instead.
 		 *
 		 * @param name The hint to set. Use the constans from the {@link Hints} class.
@@ -632,9 +678,351 @@ namespace SDL {
 		 *
 		 * @return true if the hint was set. false otherwise.
 		 */
-		[CCode (cname="SDL_SetHint", cheader_filename="SDL2/SDL_hints.h")]
-		public static bool set_hint (string name, string hintValue);
+		[CCode (cname="SDL_SetHint")]
+		public static bool @set (string name, string hintValue);
+
+		/**
+		 * Use this function to set a hint with a specific priority.
+		 *
+		 * @param name The hint to set. Use the constans from the {@link Hints} class.
+		 * @param hintValue The value of the hint variable.
+		 * @param priority The {@link Priority} level for the hint.
+		 *
+		 * @return true if the hint was set. false otherwise.
+		 */
+		[CCode (cname="SDL_SetHintWithPriority")]
+		public static bool set_with_priority(string name, string hintValue, Priority priority);
 	}
+
+//    ____            _
+//   |  _ \          (_)     _
+//   | |_) | __ _ ___ _  ___(_)
+//   |  _ < / _` / __| |/ __|
+//   | |_) | (_| \__ \ | (__ _
+//   |____/_\__,_|___/_|\___(_)    _    _                 _ _ _
+//   |  ____|                     | |  | |               | | (_)
+//   | |__   _ __ _ __ ___  _ __  | |__| | __ _ _ __   __| | |_ _ __   __ _
+//   |  __| | '__| '__/ _ \| '__| |  __  |/ _` | '_ \ / _` | | | '_ \ / _` |
+//   | |____| |  | | | (_) | |    | |  | | (_| | | | | (_| | | | | | | (_| |
+//   |______|_|  |_|  \___/|_|    |_|  |_|\__,_|_| |_|\__,_|_|_|_| |_|\__, |
+//                                                                     __/ |
+//                                                                    |___/
+
+	/**
+	 * Use this function to clear any previous error message.
+	 */
+	[CCode (cname="SDL_ClearError")]
+	public static void clear_error();
+
+	/**
+	 * Use this function to retrieve a message about the last error that occurred.
+	 *
+	 * It is possible for multiple errors to occur before calling {@link get_error}.
+	 * Only the last error is returned.
+	 *
+	 * @return Returns a message with information about the specific error that occurred,
+	 * or an empty string if there hasn't been an error since the last call to {@link clear_error}.
+	 */
+	[CCode (cname="SDL_GetError")]
+	public static unowned string get_error();
+
+	/**
+	 * Use this function to set the SDL error string.
+	 *
+	 * @param fmt A printf() style message format string.
+	 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+	 *
+	 * @return Always -1.
+	 */
+	[CCode (cname="SDL_SetError")]
+	[PrintFormat]
+	public static int set_error(string fmt, ...);
+
+//   __      ___     _
+//   \ \    / (_)   | |          _
+//    \ \  / / _  __| | ___  ___(_)
+//     \ \/ / | |/ _` |/ _ \/ _ \
+//      \  /  | | (_| |  __/ (_) |
+//    ___\/___|_|\__,_|\___|\___(_)      _                _           _   _____                _           _
+//   |__ \|  __ \      /\               | |              | |         | | |  __ \              | |         (_)
+//      ) | |  | |    /  \   ___ ___ ___| | ___ _ __ __ _| |_ ___  __| | | |__) |___ _ __   __| | ___ _ __ _ _ __   __ _
+//     / /| |  | |   / /\ \ / __/ __/ _ \ |/ _ \ '__/ _` | __/ _ \/ _` | |  _  // _ \ '_ \ / _` |/ _ \ '__| | '_ \ / _` |
+//    / /_| |__| |  / ____ \ (_| (_|  __/ |  __/ | | (_| | ||  __/ (_| | | | \ \  __/ | | | (_| |  __/ |  | | | | | (_| |
+//   |____|_____/  /_/    \_\___\___\___|_|\___|_|  \__,_|\__\___|\__,_| |_|  \_\___|_| |_|\__,_|\___|_|  |_|_| |_|\__, |
+//                                                                                                                  __/ |
+//                                                                                                                 |___/
+
+	/**
+	 * The blend mode used in {@link Renderer.copy} and drawing operations.
+	 */
+	[CCode (cname="SDL_BlendMode", cprefix="SDL_BLENDMODE_")]
+	public enum BlendMode {
+		/**
+		 * No blending.
+		 *
+		 * dstRGBA = srcRGBA
+		 */
+		NONE,
+
+		/**
+		 * Alpha blending.
+		 *
+		 * dstRGB = (srcRGB * srcA) + (dstRGB * (1-srcA))
+		 *
+		 * dstA = srcA + (dstA * (1-srcA))
+		 */
+		BLEND,
+
+		/**
+		 * Additive blending.
+		 *
+		 * dstRGB = (srcRGB * srcA) + dstRGB
+		 *
+		 * dstA = dstA
+		 */
+		ADD,
+
+		/**
+		 * Color modulate
+		 *
+		 * dstRGB = srcRGB * dstRGB
+		 *
+		 * dstA = dstA
+		 */
+		MOD;
+	}
+
+	/**
+	 * Represents rendering state.
+	 */
+	[CCode (cprefix="SDL_", cname="SDL_Renderer", free_function="SDL_DestroyRenderer", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
+	[Compact]
+	public class Renderer {
+
+		/**
+		 * Flags used when creating a rendering context.
+		 */
+		[CCode (cname="SDL_RenderFlags", cprefix="SDL_RENDERER_", has_type_id=false)]
+		public enum Flags {
+			/**
+			 * The renderer is a software fallback.
+			 */
+			SOFTWARE,
+			/**
+			 * The renderer uses hardware acceleration.
+			 */
+			ACCELERATED,
+			/**
+			 * Present is synchronized with the refresh rate.
+			 */
+			PRESENTVSYNC,
+			/**
+			 * The renderer supports rendering to texture.
+			 */
+			TARGETTEXTURE
+		}
+
+		/**
+		 * Flip constants for {@link copy_ex}.
+		 */
+		[CCode (cname="SDL_RendererFlip", cprefix="SDL_FLIP_", cheader_filename="SDL2/SDL_render.h")]
+		[Flags]
+		public enum Flip {
+			/**
+			 * Do not flip.
+			 */
+			NONE,
+
+			/**
+			 * Flip horizontally.
+			 */
+			HORIZONTAL,
+
+			/**
+			 * Flip vertically.
+			 */
+			VERTICAL;
+		}
+
+		/**
+		 * Use this function to create a 2D rendering context for a window.
+		 *
+		 * Note that providing no flags gives priority to available {@link SDL.Renderer.Flags.ACCELERATED} renderers.
+		 *
+		 * @param window the window where rendering is displayed
+		 * @param index the index of the rendering driver to initialize, or -1 to initialize the first one supporting the requested flags.
+		 * @param flags 0, or one or more {@link SDL.Renderer.Flags} OR'd together.
+		 *
+		 * @return Returns a valid rendering context or null if there was an error. Call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_CreateRenderer")]
+		public static Renderer? create_renderer(Window window, int index, uint32 flags);
+
+		/**
+		 * Use this function to clear the current rendering target with the drawing color.
+		 *
+		 * @return Returns 0 on success or a negative error code on failure; call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_RenderClear")]
+		public int clear();
+
+		/**
+		 * Copy a portion of the texture to the current rendering target.
+		 *
+		 * @param texture The source texture.
+		 * @param srcrect The source rectangle, or null for the entire texture.
+		 * @param dstrect The destination rectangle, or null for the entire rendering target. The texture will be stretched to fill the given rectangle.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderCopy")]
+		public int copy(Texture texture, Rectangle? srcrect, Rectangle? dstrect);
+
+		/**
+		 * Copy a portion of the source texture to the current rendering target, rotating it by angle around the given center.
+		 *
+		 * @param texture The source texture.
+		 * @param srcrect The source rectangle, or null for the entire texture.
+		 * @param dstrect The destination rectangle, or null for the entire rendering target.
+		 * @param angle An angle in degrees that indicates the rotation that will be applied to dstrect.
+		 * @param center A point indicating the point around which dstrect will be rotated (if null, rotation will be done aroud dstrect.w/2, dstrect.h/2)
+		 * @param flip An {@link Flip} value stating which flipping actions should be performed on the texture.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderCopyEx")]
+		public int copy_ex(Texture texture, Rectangle? srcrect, Rectangle dstrect, double angle, Point? center, Flip flip);
+
+		/**
+		 * Draw a line on the current rendering target.
+		 *
+		 * @param x1 The x coordinate of the start point.
+		 * @param y1 The y coordinate of the start point.
+		 * @param x2 The x coordinate of the end point.
+		 * @param y2 The y coordinate of the end point.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderDrawLine")]
+		public int draw_line(int x1, int y1, int x2, int y2);
+
+		/**
+		 * Draw a point on the current rendering target.
+		 *
+		 * @param x The x coordinate of the point.
+		 * @param y The y coordinate of the point.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderDrawPoint")]
+		public int draw_point(int x, int y);
+
+		/**
+		 * Draw a rectangle on the current rendering target.
+		 *
+		 * @param rect The destination rectangle, or null to outline the entire rendering target.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderDrawRect")]
+		public int draw_rect(Rectangle rect);
+
+		/**
+		 * Fill a rectangle on the current rendering target with the drawing color.
+		 *
+		 * @param rect The destination rectangle, or null for the entire rendering target.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderFillRect")]
+		public int fill_rect(Rectangle rect);
+
+		/**
+		 * Use this function to update the screen with any rendering performed since the previous call.
+		 */
+		[CCode (cname="SDL_RenderPresent")]
+		public void present();
+
+		/**
+		 * Use this function to set the color used for drawing operations (Rectangle, Line and Clear).
+		 *
+		 * @param r The Red value used to draw on the rendering target.
+		 * @param g The Green value used to draw on the rendering target.
+		 * @param b The Blue value used to draw on the rendering target.
+		 * @param a The alpha value used to draw on the rendering target. Usually {@link SDL.Alpha.OPAQUE} (255).
+		 *          Use set_draw_blend_mode() to specify how the alpha channel is used
+		 *
+		 * @return Returns 0 on success or a negative error code on failure; call SDL.get_error() for more information.
+		 */
+		[CCode (cname="SDL_SetRenderDrawColor")]
+		public int set_draw_color(uint8 r, uint8 g, uint8 b, uint8 a);
+
+		/**
+		 * Set the drawing area for rendering on the current target.
+		 *
+		 * If the window associated with the renderer is resized, the viewport is automatically reset.
+		 *
+		 * @param rect The rectangle representing the drawing area, or null to set the viewport to the entire target.
+		 *             The x,y of the viewport rect represents the origin for rendering.
+		 *
+		 * @return 0 on success, or -1 on error.
+		 */
+		[CCode (cname="SDL_RenderSetViewport")]
+		public int set_viewport(Rectangle rect);
+	}
+
+	[CCode (cname="SDL_Texture", free_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h")]
+	[Compact]
+	public class Texture {
+
+		/**
+		 * Create a texture from an existing surface.
+		 *
+		 * @param renderer The renderer.
+		 * @param surface The surface containing pixel data used to fill the texture.
+		 *
+		 * @return The created texture is returned, or null on error.
+		 */
+		[CCode (cname="SDL_CreateTextureFromSurface")]
+		public static Texture? create_from_surface(Renderer renderer, Surface surface);
+
+		/**
+		 * Set an additional alpha value used in render copy operations.
+		 *
+		 * @param alpha The alpha value multiplied into copy operations.
+		 *
+		 * @return 0 on success, or -1 if the texture is not valid or alpha modulation is not supported.
+		 */
+		[CCode (cname="SDL_SetTextureAlphaMod")]
+		public int set_alpha(uint8 alpha);
+
+		/**
+		 * Set the blend mode used for texture copy operations.
+		 *
+		 * If the blend mode is not supported, the closest supported mode is chosen.
+		 *
+		 * @param blendMode {@link BlendMode} to use for texture blending.
+		 *
+		 * @return 0 on success, or -1 if the texture is not valid or the blend mode is not supported.
+		 */
+		[CCode (cname="SDL_SetTextureBlendMode")]
+		public int set_blendmode(BlendMode blendMode);
+
+		/**
+		 * Set an additional color value used in render copy operations.
+		 *
+		 * @param r The red color value multiplied into copy operations.
+		 * @param g The green color value multiplied into copy operations.
+		 * @param b TThe blue color value multiplied into copy operations.
+		 *
+		 * @return 0 on success, or -1 if the texture is not valid or color modulation
+		 *          is not supported.
+		 */
+		[CCode (cname="SDL_SetTextureColorMod")]
+		public int set_color_mod(uint8 r, uint8 g, uint8 b);
+	}
+
+	//TODO assign to categories
 
 	/**
 	 * These define alpha as the opacity of a surface.
@@ -863,55 +1251,6 @@ namespace SDL {
 
 	}
 
-	[CCode (cname="SDL_Texture", free_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h")]
-	[Compact]
-	public class Texture {
-		/**
-		 * Create a texture from an existing surface.
-		 *
-		 * @param renderer The renderer.
-		 * @param surface The surface containing pixel data used to fill the texture.
-		 *
-		 * @return The created texture is returned, or null on error.
-		 */
-		[CCode (cname="SDL_CreateTextureFromSurface")]
-		public static Texture? create_from_surface(Renderer renderer, Surface surface);
-
-		/**
-		 * Set an additional alpha value used in render copy operations.
-		 *
-		 * @param alpha The alpha value multiplied into copy operations.
-		 *
-		 * @return 0 on success, or -1 if the texture is not valid or alpha modulation is not supported.
-		 */
-		[CCode (cname="SDL_SetTextureAlphaMod")]
-		public int set_alpha(uint8 alpha);
-
-		/**
-		 * Set the blend mode used for texture copy operations.
-		 *
-		 * If the blend mode is not supported, the closest supported mode is chosen.
-		 *
-		 * @param blendMode {@link BlendMode} to use for texture blending.
-		 *
-		 * @return 0 on success, or -1 if the texture is not valid or the blend mode is not supported.
-		 */
-		[CCode (cname="SDL_SetTextureBlendMode")]
-		public int set_blendmode(BlendMode blendMode);
-
-		/**
-		 * Set an additional color value used in render copy operations.
-		 *
-		 * @param r The red color value multiplied into copy operations.
-		 * @param g The green color value multiplied into copy operations.
-		 * @param b TThe blue color value multiplied into copy operations.
-		 *
-		 * @return 0 on success, or -1 if the texture is not valid or color modulation
-		 *          is not supported.
-		 */
-		[CCode (cname="SDL_SetTextureColorMod")]
-		public int set_color_mod(uint8 r, uint8 g, uint8 b);
-	}
 
 	[CCode (cprefix="SDL_", cname="SDL_Window", free_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
 	[Compact]
@@ -1046,183 +1385,8 @@ namespace SDL {
 		public int update_surface();
 	}
 
-	/**
-	 * Flip constants for {@link Renderer.copy_ex}.
-	 */
-	[CCode (cname="SDL_RendererFlip", cprefix="SDL_FLIP_", cheader_filename="SDL2/SDL_render.h")]
-	[Flags]
-	public enum RendererFlip {
-		/**
-		 * Do not flip.
-		 */
-		NONE,
-		/**
-		 * Flip horizontally.
-		 */
-		HORIZONTAL,
-		/**
-		 * Flip vertically.
-		 */
-		VERTICAL;
-	}
-
-	/**
-	 * Represents rendering state.
-	 */
-	[CCode (cprefix="SDL_", cname="SDL_Renderer", free_function="SDL_DestroyRenderer", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
-	[Compact]
-	public class Renderer {
-
-		/**
-		 * Flags used when creating a rendering context.
-		 */
-		[CCode (cname="SDL_RenderFlags", cprefix="SDL_RENDERER_", has_type_id=false)]
-		public enum Flags {
-			/**
-			 * The renderer is a software fallback.
-			 */
-			SOFTWARE,
-			/**
-			 * The renderer uses hardware acceleration.
-			 */
-			ACCELERATED,
-			/**
-			 * Present is synchronized with the refresh rate.
-			 */
-			PRESENTVSYNC,
-			/**
-			 * The renderer supports rendering to texture.
-			 */
-			TARGETTEXTURE
-		}
-
-		/**
-		 * Use this function to create a 2D rendering context for a window.
-		 *
-		 * Note that providing no flags gives priority to available {@link SDL.Renderer.Flags.ACCELERATED} renderers.
-		 *
-		 * @param window the window where rendering is displayed
-		 * @param index the index of the rendering driver to initialize, or -1 to initialize the first one supporting the requested flags.
-		 * @param flags 0, or one or more {@link SDL.Renderer.Flags} OR'd together.
-		 *
-		 * @return Returns a valid rendering context or null if there was an error. Call SDL.get_error() for more information.
-		 */
-		[CCode (cname="SDL_CreateRenderer")]
-		public static Renderer? create_renderer(Window window, int index, uint32 flags);
-
-		/**
-		 * Use this function to clear the current rendering target with the drawing color.
-		 *
-		 * @return Returns 0 on success or a negative error code on failure; call SDL.get_error() for more information.
-		 */
-		[CCode (cname="SDL_RenderClear")]
-		public int clear();
 
 
-		/**
-		 * Copy a portion of the texture to the current rendering target.
-		 *
-		 * @param texture The source texture.
-		 * @param srcrect The source rectangle, or null for the entire texture.
-		 * @param dstrect The destination rectangle, or null for the entire rendering target. The texture will be stretched to fill the given rectangle.
-		 *
-		 * @return 0 on success, or -1 on error.
-		 */
-		[CCode (cname="SDL_RenderCopy")]
-		public int copy(Texture texture, Rectangle? srcrect, Rectangle? dstrect);
-
-		/**
-		 * Copy a portion of the source texture to the current rendering target, rotating it by angle around the given center.
-		 *
-		 * @param texture The source texture.
-		 * @param srcrect The source rectangle, or null for the entire texture.
-		 * @param dstrect The destination rectangle, or null for the entire rendering target.
-		 * @param angle An angle in degrees that indicates the rotation that will be applied to dstrect.
-		 * @param center A point indicating the point around which dstrect will be rotated (if null, rotation will be done aroud dstrect.w/2, dstrect.h/2)
-		 * @param flip An {@link RendererFlip} value stating which flipping actions should be performed on the texture.
-		 *
-		 * @return 0 on success, or -1 on error.
-		 */
-		[CCode (cname="SDL_RenderCopyEx")]
-		public int copy_ex(Texture texture, Rectangle? srcrect, Rectangle dstrect, double angle, Point? center, RendererFlip flip);
-
-		/**
-		 * Draw a line on the current rendering target.
-		 *
-		 * @param x1 The x coordinate of the start point.
-		 * @param y1 The y coordinate of the start point.
-		 * @param x2 The x coordinate of the end point.
-		 * @param y2 The y coordinate of the end point.
-		 *
-		 * @return 0 on success, or -1 on error.
-		 */
-		[CCode (cname="SDL_RenderDrawLine")]
-		public int draw_line(int x1, int y1, int x2, int y2);
-
-		/**
-		 * Draw a point on the current rendering target.
-		 *
-		 * @param x The x coordinate of the point.
-		 * @param y The y coordinate of the point.
-		 *
-		 * @return 0 on success, or -1 on error.
-		 */
-		[CCode (cname="SDL_RenderDrawPoint")]
-		public int draw_point(int x, int y);
-
-		/**
-		 * Draw a rectangle on the current rendering target.
-		 *
-		 * @param rect The destination rectangle, or null to outline the entire rendering target.
-		 *
-		 * @return 0 on success, or -1 on error.
-		 */
-		[CCode (cname="SDL_RenderDrawRect")]
-		public int draw_rect(Rectangle rect);
-
-		/**
-		 * Fill a rectangle on the current rendering target with the drawing color.
-		 *
-		 * @param rect The destination rectangle, or null for the entire rendering target.
-		 *
-		 * @return 0 on success, or -1 on error.
-		 */
-		[CCode (cname="SDL_RenderFillRect")]
-		public int fill_rect(Rectangle rect);
-
-		/**
-		 * Use this function to update the screen with any rendering performed since the previous call.
-		 */
-		[CCode (cname="SDL_RenderPresent")]
-		public void present();
-
-		/**
-		 * Use this function to set the color used for drawing operations (Rectangle, Line and Clear).
-		 *
-		 * @param r The Red value used to draw on the rendering target.
-		 * @param g The Green value used to draw on the rendering target.
-		 * @param b The Blue value used to draw on the rendering target.
-		 * @param a The alpha value used to draw on the rendering target. Usually {@link SDL.Alpha.OPAQUE} (255).
-		 *          Use set_draw_blend_mode() to specify how the alpha channel is used
-		 *
-		 * @return Returns 0 on success or a negative error code on failure; call SDL.get_error() for more information.
-		 */
-		[CCode (cname="SDL_SetRenderDrawColor")]
-		public int set_draw_color(uint8 r, uint8 g, uint8 b, uint8 a);
-
-		/**
-		 * Set the drawing area for rendering on the current target.
-		 *
-		 * If the window associated with the renderer is resized, the viewport is automatically reset.
-		 *
-		 * @param rect The rectangle representing the drawing area, or null to set the viewport to the entire target.
-		 *             The x,y of the viewport rect represents the origin for rendering.
-		 *
-		 * @return 0 on success, or -1 on error.
-		 */
-		[CCode (cname="SDL_RenderSetViewport")]
-		public int set_viewport(Rectangle rect);
-	}
 
 	[CCode (cname="SDL_TimerID", ref_function="", unref_function="", cheader_filename="SDL2/SDL_timer.h", has_type_id=false)]
 	[Compact]
