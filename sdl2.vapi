@@ -645,6 +645,22 @@ namespace SDL {
 		TRANSPARENT
 	}
 
+	[CCode (cname="SDL_Cursor", free_function="SDL_FreeCursor", cheader_filename="SDL2/SDL_mouse.h")]
+	[Compact]
+	public class Cursor {
+
+		/**
+		 * Use this function to retrieve the current state of the mouse.
+		 *
+		 * @param x The x coordinate of the mouse cursor position relative to the focus window.
+		 * @param y The y coordinate of the mouse cursor position relative to the focus window.
+		 *
+		 * @return The button bitmask of the current button state.
+		 */
+		[CCode (cname="SDL_GetMouseState")]
+		public static uint32 get_state(out int x, out int y);
+	}
+
 	/**
 	 * A structure that represents a color.
 	 */
