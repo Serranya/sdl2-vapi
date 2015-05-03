@@ -192,7 +192,7 @@ namespace SDL {
 		 * @param oldValue The old value.
 		 * @param newValue The new value.
 		 */
-		[CCode (cname="SDL_HintCallback", delegate_target_pos=0, has_target=true)]
+		[CCode (cname="SDL_HintCallback", instance_pos=0.5, has_target=true)]
 		public delegate void Callback(string name, string oldValue, string? newValue);
 
 		/**
@@ -737,6 +737,182 @@ namespace SDL {
 	[CCode (cname="SDL_SetError")]
 	[PrintFormat]
 	public static int set_error(string fmt, ...);
+
+//    ____            _
+//   |  _ \          (_)         _
+//   | |_) | __ _ ___ _  ___ ___(_)
+//   |  _ < / _` / __| |/ __/ __|
+//   | |_) | (_| \__ \ | (__\__ \_
+//   |____/ \__,_|___/_|\___|___(_)              _ _ _
+//   | |                 | |  | |               | | (_)
+//   | |     ___   __ _  | |__| | __ _ _ __   __| | |_ _ __   __ _
+//   | |    / _ \ / _` | |  __  |/ _` | '_ \ / _` | | | '_ \ / _` |
+//   | |___| (_) | (_| | | |  | | (_| | | | | (_| | | | | | | (_| |
+//   |______\___/ \__, | |_|  |_|\__,_|_| |_|\__,_|_|_|_| |_|\__, |
+//                 __/ |                                      __/ |
+//                |___/                                      |___/
+
+	/**
+	 * This namespace contains functions for handling simple log messages with categories and priorities.
+	 *
+	 * The default log priorities are as follows:
+	 *
+	 * || {@link Category.APPLICATION} || {@link Priority.INFO} ||
+	 * || {@link Category.ASSERT} || {@link Priority.WARN} ||
+	 * || {@link Category.TEST} || {@link Priority.VERBOSE} ||
+	 * || everything else || {@link Priority.CRITICAL} ||
+	 *
+	 * If you are debugging SDL you might want to call:
+	 *
+	 * {{{
+	 * SDL.Logging.set_all_priority(SDL.Logging.Priority.WARN);
+	 * }}}
+	 *
+	 * Here's where the messages go on different platforms:
+	 *
+	 * || Windows || Debug output stream ||
+	 * || Android || Log output ||
+	 * || Others || Standard error output (stderr) ||
+	 *
+	 * Messages longer than the {@link SDL.Logging.MAX_LOG_MESSAGE} (4096 bytes) will be truncated.
+	 */
+	[CCode (cheader_file="SDL2/SDL_log.h")]
+	namespace Logging {
+
+		/**
+		 * The maximum size of a log message.
+		 *
+		 * Messages longer than the maximum size will be truncated.
+		 */
+		[CCode (cname="SDL_MAX_LOG_MESSAGE")]
+		public static const int MAX_LOG_MESSAGE;
+
+		/**
+		 * The log output function.
+		 *
+		 * @param category The category of the message.
+		 * @param priority The priority of the message.
+		 * @param message The message being output.
+		 */
+		[CCode (cname="SDL_LogOutputFunction", instance_pos=0.5, has_target=true)]
+		public delegate void OutputFunction(int category, Priority priority, string message);
+
+		/**
+		 * The predefined log categories.
+		 */
+		[CCode (cname="int", cprefix="SDL_LOG_CATEGORY_", has_type_id=false)]
+		public enum Category {
+			APPLICATION,
+			ERROR,
+			ASSERT,
+			SYSTEM,
+			AUDIO,
+			VIDEO,
+			RENDER,
+			INPUT,
+			TEST,
+
+			/**
+			 * Beyond this point is reserved for application use.
+			 *
+			 * {{{
+			 * enum {
+			 *    MYAPP_CATEGORY_AWESOME1 = SDL.Logging.Category.CUSTOM,
+			 *    MYAPP_CATEGORY_AWESOME2,
+			 *    MYAPP_CATEGORY_AWESOME3,
+			 *    ...
+			 * };
+			 * }}}
+			 */
+			CUSTOM;
+		}
+
+		[CCode (cname="SDL_LogPriority", cprefix="SDL_LOG_PRIORITY_", has_type_id=false)]
+		public enum Priority {
+			VERBOSE,
+			DEBUG,
+			INFO,
+			WARN,
+			ERROR,
+			CRITICAL;
+		}
+
+		/**
+		 * Use this function to log a message with {@link Category.APPLICATION} and {@link Priority.CRITICAL}.
+		 *
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_Log")]
+		[PrintFormat]
+		public static void log(string fmt, ...);
+
+		/**
+		 * Use this function to log a message with {@link Priority.CRITICAL}.
+		 *
+		 * @param category The category of the message. See {@link Category}.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogCritical")]
+		[PrintFormat]
+		public static void log_critical(int category, string fmt, ...);
+
+		/**
+		 * Use this function to log a message with {@link Priority.DEBUG}.
+		 *
+		 * @param category The category of the message. See {@link Category}.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogDebug")]
+		[PrintFormat]
+		public static void log_debug(int category, string fmt, ...);
+
+		/**
+		 * Use this function to log a message with {@link Priority.ERROR}.
+		 *
+		 * @param category The category of the message. See {@link Category}.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogError")]
+		[PrintFormat]
+		public static void log_error(int category, string fmt, ...);
+
+		[CCode (cname="SDL_LogSetOutputFunction")]
+		public void set_output_function(OutputFunction callback);
+
+		/**
+		 * Use this function to get the current log output function.
+		 *
+		 * @param callback The current delegate.
+		 */
+		[CCode (cname="SDL_LogGetOutputFunction")]
+		public static void get_output_function(out unowned OutputFunction callback);
+
+		/**
+		 * Use this function to get the priority of a particular log category.
+		 *
+		 * @param category The category to query. See {@link Category}.
+		 *
+		 * @return Returns the {@link Priority} for the requested {@link Category}.
+		 */
+		[CCode (cname="SDL_LogGetPriority")]
+		public static Priority get_priority(int category);
+
+		/**
+		 * Use this function to log a message with {@link Priority.INFO}.
+		 *
+		 * @param category The category of the message. See {@link Category}.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogInfo")]
+		[PrintFormat]
+		public static void log_info(int category, string fmt, ...);
+
+	}
 
 //   __      ___     _
 //   \ \    / (_)   | |          _
