@@ -776,7 +776,6 @@ namespace SDL {
 	 *
 	 * Messages longer than the {@link SDL.Logging.MAX_LOG_MESSAGE} (4096 bytes) will be truncated.
 	 */
-	[CCode (cheader_file="SDL2/SDL_log.h")]
 	namespace Logging {
 
 		/**
@@ -838,58 +837,21 @@ namespace SDL {
 		}
 
 		/**
-		 * Use this function to log a message with {@link Category.APPLICATION} and {@link Priority.CRITICAL}.
+		 * Use this function to set the priority of all log categories.
 		 *
-		 * @param fmt A printf() style message format string.
-		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 * @param priority The {@link Priority} to assign.
 		 */
-		[CCode (cname="SDL_Log")]
-		[PrintFormat]
-		public static void log(string fmt, ...);
+		[CCode (cname="SDL_LogSetAllPriority")]
+		public static void set_all_priority(Priority priority);
 
 		/**
-		 * Use this function to log a message with {@link Priority.CRITICAL}.
+		 * Use this function to set the priority of a particular log category.
 		 *
-		 * @param category The category of the message. See {@link Category}.
-		 * @param fmt A printf() style message format string.
-		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 * @param category The {@link Category} to assign a {@link Priority}
+		 * @param priority The {@link Priority} to assign.
 		 */
-		[CCode (cname="SDL_LogCritical")]
-		[PrintFormat]
-		public static void log_critical(int category, string fmt, ...);
-
-		/**
-		 * Use this function to log a message with {@link Priority.DEBUG}.
-		 *
-		 * @param category The category of the message. See {@link Category}.
-		 * @param fmt A printf() style message format string.
-		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
-		 */
-		[CCode (cname="SDL_LogDebug")]
-		[PrintFormat]
-		public static void log_debug(int category, string fmt, ...);
-
-		/**
-		 * Use this function to log a message with {@link Priority.ERROR}.
-		 *
-		 * @param category The category of the message. See {@link Category}.
-		 * @param fmt A printf() style message format string.
-		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
-		 */
-		[CCode (cname="SDL_LogError")]
-		[PrintFormat]
-		public static void log_error(int category, string fmt, ...);
-
-		[CCode (cname="SDL_LogSetOutputFunction")]
-		public void set_output_function(OutputFunction callback);
-
-		/**
-		 * Use this function to get the current log output function.
-		 *
-		 * @param callback The current delegate.
-		 */
-		[CCode (cname="SDL_LogGetOutputFunction")]
-		public static void get_output_function(out unowned OutputFunction callback);
+		[CCode (cname="SDL_LogSetPriority")]
+		public static void set_priority(int category, Priority priority);
 
 		/**
 		 * Use this function to get the priority of a particular log category.
@@ -902,6 +864,43 @@ namespace SDL {
 		public static Priority get_priority(int category);
 
 		/**
+		 * Use this function to reset all priorities to default.
+		 *
+		 * This is called in {@link SDL.quit}.
+		 */
+		[CCode (cname="SDL_LogResetPriorities")]
+		public static void reset_priorities();
+
+		/**
+		 * Use this function to log a message with {@link Category.APPLICATION} and {@link Priority.CRITICAL}.
+		 *
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_Log")]
+		public static void log(string fmt, ...);
+
+		/**
+		 * Use this function to log a message with {@link Priority.VERBOSE}.
+		 *
+		 * @param category The category of the message. See {@link Category}.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogVerbose")]
+		public static void log_verbose(int category, string fmt, ...);
+
+		/**
+		 * Use this function to log a message with {@link Priority.DEBUG}.
+		 *
+		 * @param category The category of the message. See {@link Category}.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogDebug")]
+		public static void log_debug(int category, string fmt, ...);
+
+		/**
 		 * Use this function to log a message with {@link Priority.INFO}.
 		 *
 		 * @param category The category of the message. See {@link Category}.
@@ -909,9 +908,64 @@ namespace SDL {
 		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
 		 */
 		[CCode (cname="SDL_LogInfo")]
-		[PrintFormat]
 		public static void log_info(int category, string fmt, ...);
 
+		/**
+		 * Use this function to log a message with {@link Priority.WARN}.
+		 *
+		 * @param category The category of the message. See {@link Category}.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogWarn")]
+		public static void log_warn(int category, string fmt, ...);
+
+		/**
+		 * Use this function to log a message with {@link Priority.ERROR}.
+		 *
+		 * @param category The category of the message. See {@link Category}.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogError")]
+		public static void log_error(int category, string fmt, ...);
+
+		/**
+		 * Use this function to log a message with {@link Priority.CRITICAL}.
+		 *
+		 * @param category The category of the message. See {@link Category}.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogCritical")]
+		public static void log_critical(int category, string fmt, ...);
+
+		/**
+		 * Use this function to log a message with the specified category and priority.
+		 *
+		 * @param category The {@link Category} of the message.
+		 * @param priority The {@link Priority} of the message.
+		 * @param fmt A printf() style message format string.
+		 * @param ... Additional parameters matching % tokens in the fmt string, if any.
+		 */
+		[CCode (cname="SDL_LogMessage")]
+		public static void log_message(int category, Priority priority, string fmt, ...);
+
+		/**
+		 * Use this function to get the current log output function.
+		 *
+		 * @param callback The current delegate.
+		 */
+		[CCode (cname="SDL_LogGetOutputFunction")]
+		public static void get_output_function(out unowned OutputFunction callback);
+
+		/**
+		 * Use this function to replace the default log output function with one of your own.
+		 *
+		 * @param callback The {@link OutputFunction} to call instead of the default.
+		 */
+		[CCode (cname="SDL_LogSetOutputFunction")]
+		public void set_output_function(OutputFunction callback);
 	}
 
 //   __      ___     _
