@@ -167,7 +167,7 @@ namespace SDL {
 		/**
 		 * An enumeration of hint priorities
 		 */
-		[CCode (cname="SDL_HintPriority", cprefix="SDL_HINT_")]
+		[CCode (cname="SDL_HintPriority", cprefix="SDL_HINT_", has_type_id=false)]
 		public enum Priority {
 			/**
 			 * Low priority, used for default values.
@@ -968,6 +968,191 @@ namespace SDL {
 		public void set_output_function(OutputFunction callback);
 	}
 
+//    ____            _
+//   |  _ \          (_)     _
+//   | |_) | __ _ ___ _  ___(_)
+//   |  _ < / _` / __| |/ __|
+//   | |_) | (_| \__ \ | (__ _
+//   |____/ \__,_|___/_|\___(_)  _   _
+//       /\                     | | (_)
+//      /  \   ___ ___  ___ _ __| |_ _  ___  _ __  ___
+//     / /\ \ / __/ __|/ _ \ '__| __| |/ _ \| '_ \/ __|
+//    / ____ \\__ \__ \  __/ |  | |_| | (_) | | | \__ \
+//   /_/    \_\___/___/\___|_|   \__|_|\___/|_| |_|___/
+//
+//
+
+	/**
+	 * This category contains functions for managing assertions.
+	 *
+	 * A fairly detailed discussion of the features of SDL_assert vs the standard assert() macro,
+	 * and some technical explanation about how this is implemented can be found in this Google+ post from Ryan.
+	 *
+	 * SDL_ASSERT_LEVEL affects which assertions, if any, are processed during compiling based on which function was
+	 * used to create the assertion (see functions below).
+	 *
+	 * SDL_ASSERT_LEVEL can be defined in your project. If not otherwise set, SDL_ASSERT_LEVEL will default to level 2
+	 * for debug builds or level 1 for release builds.
+	 *
+	 * The following table describes each SDL_ASSERT_LEVEL setting and the corresponding impact on the three SDL_assert functions:
+	 *
+	 * || "SDL_ASSERT_LEVEL" || "Description" || "Function" ||
+	 * || 0 || all assertions disabled || SDL_assert = disabled, SDL_assert_release = disabled, SDL_assert_paranoid = disabled ||
+	 * || 1 || for release (default) || SDL_assert = disabled, SDL_assert_release = enabled, SDL_assert_paranoid = disabled ||
+	 * || 2 || for debugging (default) || SDL_assert = enabled, SDL_assert_release = enabled, SDL_assert_paranoid = disabled ||
+	 * || 3 || stringent for detailed checking || SDL_assert = enabled, SDL_assert_release = enabled, SDL_assert_paranoid = enabled ||
+	 */
+	namespace Assert {
+		[CCode (cname="SDL_ASSERT_LEVEL")]
+		public const int LEVEL;
+
+		[CCode (cname="SDL_DEFAULT_ASSERT_LEVEL")]
+		public const int DEFAULT_LEVEL;
+
+		[CCode (cname="SDL_AssertionHandler", has_target=true)]
+		public delegate State Handler(Data data);
+
+		[CCode (cname="SDL_AssertionHandler", has_target=false)]
+		public delegate State DefaultHandler(Data data);
+
+		/**
+		 * An enumeration of assertion handling states.
+		 *
+		 * This enumeration is returned by the {@link Handler} in {@link set_handler} to determine the response to failed assertions.
+		 */
+		[CCode (cname="SDL_assert_state", cprefix="SDL_ASSERTION_", has_type_id=false)]
+		public enum State {
+
+			/**
+			 * Retry the assert immediately.
+			 */
+			RETRY,
+
+			/**
+			 * Make the debugger trigger a breakpoint.
+			 */
+			BREAK,
+
+			/**
+			 * Terminate the program.
+			 */
+			ABORT,
+
+			/**
+			 * Ignore the assert.
+			 */
+			IGNORE,
+
+			/**
+			 * Ignore the assert from now on.
+			 */
+			ALWAYS_IGNORE;
+		}
+
+		/**
+		 * A structure that contains information about an assertion.
+		 *
+		 * This structure is filled in with information about the assertion and is used by the assertion handler then added to the assertion report.
+		 * This is returned as a linked list from {@link get_report}.
+		 */
+		[CCode (cname="SDL_assert_data", has_type_id=false)]
+		public class Data {
+			[CCode (cname="always_ignore")]
+			public int alwaysIgnore;
+
+			[CCode (cname="trigger_count")]
+			public uint triggerCount;
+
+			public string condition;
+
+			public string filename;
+
+			[CCode (cname="linenum")]
+			public int lineNumber;
+
+			public string function;
+
+			public Data next;
+		}
+
+		/**
+		 * Use this function to create an assertion for debugging.
+		 */
+		[CCode (cname="SDL_assert")]
+		public static void assert(bool condition);
+
+		/**
+		 * Use this function to create an assertion for release builds.
+		 */
+		[CCode (cname="SDL_assert_release")]
+		public static void assert_release(bool condition);
+
+		/**
+		 * Use this function to create an assertion for detailed checking.
+		 */
+		[CCode (cname="SDL_assert_paranoid")]
+		public static void assert_paranoid(bool condition);
+
+		/**
+		 * Use this function to set an application-defined assertion {@link handler}.
+		 *
+		 * This function allows an application to show its own assertion UI and/or force the response to an assertion failure.
+		 * If the application doesn't provide this, SDL will try to do the right thing, popping up a system-specific GUI dialog, and probably minimizing any fullscreen windows.
+		 *
+		 * This delegate may fire from any thread, but it runs wrapped in a mutex, so it will only fire from one thread at a time.
+		 *
+		 * This delegate is NOT reset to SDL's internal handler upon {@link SDL.quit}!
+		 *
+		 * @param handler The delegate to call when an assetion fails. Null for the default handler;
+		 */
+		[CCode (cname="SDL_SetAssertionHandler")]
+		public static void set_handler(Handler? handler);
+
+		/**
+		 * Use this function to get the default assertion handler.
+		 *
+		 * This returns the delegate that is called by default when an assertion is triggered.
+		 * This is an internal function provided by SDL, that is used for assertions when {@link set_handler} hasn't been used to provide a different function.
+		 *
+		 * @return The {@link DefaultHandler} that is called when an assert triggers.
+		 *
+		 * @since 2.0.2
+		 */
+		[CCode (cname="SDL_GetDefaultAssertionHandler")]
+		public static DefaultHandler get_default_handler();
+
+		/**
+		 * This returns the delegate that is called when an assertion is triggered.
+		 * This is either the value last passed to {@link set_handler}, or if no application-specified delegate is set, is equivalent to calling {@link get_default_handler}.
+		 *
+		 * @return The {@link Handler} that is called when an assert triggers.
+		 *
+		 * @since 2.0.2
+		 */
+		[CCode (cname="SDL_GetAssertionHandler")]
+		public static unowned Handler get_handler();
+
+		/**
+		 * Use this function to get a list of all assertion failures.
+		 *
+		 * This function gets all assertions triggered since the last call to {@link get_report}, or the start of the program.
+		 *
+		 * @return Returns a list of all failed assertions or null if the list is empty.
+		 */
+		[CCode (cname="SDL_GetAssertionReport")]
+		public static unowned Data? get_report();
+
+		/**
+		 * Use this function to clear the list of all assertion failures.
+		 *
+		 * This function will clear the list of all assertions triggered up to that point.
+		 * Immediately following this call, {@link get_report} will return no items.
+		 * In addition, any previously-triggered assertions will be reset to a {@link Data.triggerCount} of zero, and their {@link Data.alwaysIgnore} state will be false.
+		 */
+		[CCode (cname="SDL_ResetAssertionReport")]
+		public static void reset_report();
+	}
+
 //   __      ___     _
 //   \ \    / (_)   | |          _
 //    \ \  / / _  __| | ___  ___(_)
@@ -1132,7 +1317,7 @@ namespace SDL {
 	/**
 	 * The blend mode used in {@link Renderer.copy} and drawing operations.
 	 */
-	[CCode (cname="SDL_BlendMode", cprefix="SDL_BLENDMODE_")]
+	[CCode (cname="SDL_BlendMode", cprefix="SDL_BLENDMODE_", has_type_id=false)]
 	public enum BlendMode {
 		/**
 		 * No blending.
@@ -1202,7 +1387,7 @@ namespace SDL {
 		/**
 		 * Flip constants for {@link copy_ex}.
 		 */
-		[CCode (cname="SDL_RendererFlip", cprefix="SDL_FLIP_", cheader_filename="SDL2/SDL_render.h")]
+		[CCode (cname="SDL_RendererFlip", cprefix="SDL_FLIP_", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
 		[Flags]
 		public enum Flip {
 			/**
@@ -1348,7 +1533,7 @@ namespace SDL {
 		public int set_viewport(Rectangle rect);
 	}
 
-	[CCode (cname="SDL_Texture", free_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h")]
+	[CCode (cname="SDL_Texture", free_function="SDL_DestroyTexture", cheader_filename="SDL2/SDL_render.h", has_type_id=false)]
 	[Compact]
 	public class Texture {
 
@@ -1603,7 +1788,7 @@ namespace SDL {
 	/**
 	 * The structure that defines a point.
 	 */
-	[CCode (cname="SDL_Point", cheader_filename="SDL2/SDL_rect.h")]
+	[CCode (cname="SDL_Point", cheader_filename="SDL2/SDL_rect.h", has_type_id=false)]
 	[SimpleType]
 	public struct Point {
 		public int x;
@@ -1846,7 +2031,7 @@ namespace SDL {
 //                                                                   __/ |
 //                                                                  |___/
 
-	[CCode (cname="SDL_EventType", cprefix="SDL_", cheader_filename="SDL2/SDL_events.h")]
+	[CCode (cname="SDL_EventType", cprefix="SDL_", cheader_filename="SDL2/SDL_events.h", has_type_id=false)]
 	public enum EventType {
 		/**
 		 * User-requested quit
@@ -2181,7 +2366,7 @@ namespace SDL {
 	 * [[http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf]]
 	 */
 	[CCode (cname="SDL_Scancode", cprefix="SDK_SCANCODE_", cheader_filename="SDL2/SDL_scancode.h", has_type_id=false)]
-	public enum Scancode { //TODO documentation
+	public enum Scancode {
 		UNKNOWN,
 		A,
 		B,
@@ -2746,7 +2931,7 @@ namespace SDL {
 //                                              | |   | |
 //                                              |_|   |_|
 
-	[CCode (cname="SDL_Cursor", free_function="SDL_FreeCursor", cheader_filename="SDL2/SDL_mouse.h")]
+	[CCode (cname="SDL_Cursor", free_function="SDL_FreeCursor", cheader_filename="SDL2/SDL_mouse.h", has_type_id=false)]
 	[Compact]
 	public class Cursor {
 
