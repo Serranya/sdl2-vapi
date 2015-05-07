@@ -1215,13 +1215,19 @@ namespace SDL {
 		 * The versionnumber of SDL your programm was compiled against.
 		 */
 		[CCode (cname="SDL_COMPILEDVERSION")]
-		public const int COMPILEDVERSION;
+		public const int COMPILED_VERSION;
 
 		/**
 		 * The revision of SDL your programm was compiled against.
 		 */
 		[CCode (cname="SDL_REVISION", cheader_file="SDL2/revision.h")]
-		public const string COMPILEDREVISION;
+		public const string COMPILED_REVISION;
+
+		/**
+		 * The revision number of SDL your programm was compiled against.
+		 */
+		[CCode (cname="SDL_REVISION_NUMBER", cheader_file="SDL2/revision.h")]
+		public const int COMPILED_REVISION_NUMBER;
 
 		/**
 		 * Information the version of SDL in use.
@@ -1292,7 +1298,7 @@ namespace SDL {
 		 * @return The version number as a single int.
 		 */
 		[CCode (cname="SDL_VERSIONNUM")]
-		public static int version_num(uint8 major, uint8 minor, uint8 patch);
+		public static int version_number(uint8 major, uint8 minor, uint8 patch);
 
 		/**
 		 * Returns an arbitrary string, uniquely identifying the exact revision of the SDL library in use.
@@ -1301,7 +1307,7 @@ namespace SDL {
 		 *
 		 * Example: hg-5344:94189aa89b54
 		 *
-		 * This value is the revision of the code you are linked with and may be different from the code you are compiling with, which is found in the constant {@link COMPILEDREVISION}.
+		 * This value is the revision of the code you are linked with and may be different from the code you are compiling with, which is found in the constant {@link COMPILED_REVISION}.
 		 *
 		 * @return The revision your program is linked against.
 		 */
