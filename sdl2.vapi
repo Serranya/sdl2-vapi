@@ -192,7 +192,7 @@ namespace SDL {
 		 * @param oldValue The old value.
 		 * @param newValue The new value.
 		 */
-		[CCode (cname="SDL_HintCallback", instance_pos=0.5, has_target=true)]
+		[CCode (cname="SDL_HintCallback", has_target=true)]
 		public delegate void Callback(string name, string oldValue, string? newValue);
 
 		/**
