@@ -1160,6 +1160,177 @@ namespace SDL {
 		public static void reset_report();
 	}
 
+//    ____            _
+//   |  _ \          (_)     _
+//   | |_) | __ _ ___ _  ___(_)
+//   |  _ < / _` / __| |/ __|
+//   | |_) | (_| \__ \ | (__ _
+//   |____/ \__,_|___/_|\___(_)
+//   \ \    / /          (_)
+//    \ \  / /__ _ __ ___ _  ___  _ __
+//     \ \/ / _ \ '__/ __| |/ _ \| '_ \
+//      \  /  __/ |  \__ \ | (_) | | | |
+//       \/ \___|_|  |___/_|\___/|_| |_|
+//
+//
+
+	/**
+	 * These functions are used to collect or display information about the version of SDL that is currently being used by the program or that it was compiled against.
+	 *
+	 * The version consists of three segments (X.Y.Z)
+	 *
+	 *    X = Major Version, which increments with massive changes, additions, and enhancements
+	 *
+	 *    Y = Minor Version, which increments with backwards-compatible changes to the major revision
+	 *
+	 *    Z = Patchlevel, which increments with fixes to the minor revision
+	 *
+	 * Example: The current version is 2.0.3
+	 * The version may also be reported as a 4-digit numeric value where the thousands place represents the major version, the hundreds place represents the minor version, and the tens and ones places represent the patchlevel (update version).
+	 *
+	 * Example: The current version number is 2004.
+	 */
+	[CCode (cheader_file="SDL2/SDL_version.h")]
+	namespace Version {
+
+		/**
+		 * The major version of SDL your programm was compiled against.
+		 */
+		[CCode (cname="SDL_MAJOR_VERSION")]
+		public const uint8 MAJOR;
+
+		/**
+		 * The minor version of SDL your programm was compiled against.
+		 */
+		[CCode (cname="SDL_MINOR_VERSION")]
+		public const uint8 MINOR;
+
+		/**
+		 * The patchlevel of SDL your programm was compiled against.
+		 */
+		[CCode (cname="SDL_PATCHLEVEL")]
+		public const uint8 PATCH;
+
+		/**
+		 * The versionnumber of SDL your programm was compiled against.
+		 */
+		[CCode (cname="SDL_COMPILEDVERSION")]
+		public const int COMPILEDVERSION;
+
+		/**
+		 * The revision of SDL your programm was compiled against.
+		 */
+		[CCode (cname="SDL_REVISION", cheader_file="SDL2/revision.h")]
+		public const string COMPILEDREVISION;
+
+		/**
+		 * Information the version of SDL in use.
+		 *
+		 * Represents the library's version as three levels: major revision
+		 * (increments with massive changes, additions, and enhancements),
+		 * minor revision (increments with backwards-compatible changes to the
+		 * major revision), and patchlevel (increments with fixes to the minor
+		 * revision).
+		 */
+		[CCode (cname="SDL_version", has_type_id=false)]
+		public struct Version {
+
+			/**
+			 * major version
+			 */
+			public uint8 major;
+
+			/**
+			 * minor version
+			 */
+			public uint8 minor;
+
+			/**
+			 * update version
+			 */
+			public uint8 patch;
+		}
+
+		/**
+		 * Get the version of SDL that is linked against your program.
+		 *
+		 * If you are linking to SDL dynamically, then it is possible that the
+		 * current version will be different than the version you compiled against.
+		 *
+		 * This function may be called safely at any time, even before {@link SDL.init}.
+		 *
+		 * @param ver The version of SDL your program is linked against.
+		 *
+		 */
+		[CCode (cname="SDL_GetVersion")]
+		public static void @get(ref Version ver);
+
+		/**
+		 * Function to determine the SDL version your program was compiled against.
+		 *
+		 * Thus function fills the {@link Version} with the version of the library you compiled against.
+		 * This is determined by what header the compiler uses. Note that if you dynamically linked the library,
+		 * you might have a slightly newer or older version at runtime. The version can be determined with {@link get}
+		 *
+		 * @param ver The version of SDL your program is compiled against.
+		 */
+		[CCode (cname="SDL_VERSION")]
+		public static void get_compiled(ref Version ver);
+
+		/**
+		 * This function turns the version numbers into a numeric value
+		 *
+		 * (1,2,3) _> (1203)
+		 *
+		 * This assumes that there will never be >= 100 patchlevels.
+		 *
+		 * @param major major version; reported in thousands place.
+		 * @param minor minor version; reported in hundreds place.
+		 * @param patch update version (patchlevel); reported in tens and ones places.
+		 *
+		 * @return The version number as a single int.
+		 */
+		[CCode (cname="SDL_VERSIONNUM")]
+		public static int version_num(uint8 major, uint8 minor, uint8 patch);
+
+		/**
+		 * Returns an arbitrary string, uniquely identifying the exact revision of the SDL library in use.
+		 *
+		 * The revision is a string including sequential revision number that is incremented with each commit, and a hash of the last code change.
+		 *
+		 * Example: hg-5344:94189aa89b54
+		 *
+		 * This value is the revision of the code you are linked with and may be different from the code you are compiling with, which is found in the constant {@link COMPILEDREVISION}.
+		 *
+		 * @return The revision your program is linked against.
+		 */
+		[CCode (cname="SDL_GetRevision")]
+		public static string get_revision();
+
+		/**
+		 * Use this function to get the revision number of SDL that is linked against your program.
+		 *
+		 * This is an incrementing number based on commits to hg.libsdl.org.
+		 *
+		 * @return a number uniquely identifying the exact revision of the SDL library in use.
+		 */
+		[CCode (cname="SDL_GetRevisionNumber")]
+		public static int get_revision_number();
+
+		/**
+		 * Use this function to determine whether the SDL version compiled against is at least as new as the specified version.
+		 *
+		 * @param major major version
+		 * @param minor minor version
+		 * @param patch update version (patchlevel)
+		 *
+		 * @return True if compiled with SDL version at least major.minor.patch.
+		 */
+		[CCode (cname="SDL_VERSION_ATLEAST")]
+		public static bool atleast(uint8 major, uint8 minor, uint8 patch);
+	}
+
+
 //   __      ___     _
 //   \ \    / (_)   | |          _
 //    \ \  / / _  __| | ___  ___(_)
