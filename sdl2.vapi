@@ -1233,6 +1233,7 @@ namespace SDL {
 		 * revision).
 		 */
 		[CCode (cname="SDL_version", has_type_id=false)]
+		[SimpleType]
 		public struct Version {
 
 			/**
