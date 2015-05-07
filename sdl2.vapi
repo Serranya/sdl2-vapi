@@ -162,7 +162,13 @@ namespace SDL {
 //                             __/ |
 //                            |___/
 
-	public class Hints {
+	/**
+	 * This namepsace contains functions to set and get configuration hints.
+	 *
+	 * In general these hints are just that - they may or may not be supported or applicable on any given plattform,
+	 * but hey provide a way for an application or user to give the library a hint as to how they would like the library to work.
+	 */
+	namespace Hints {
 
 		/**
 		 * An enumeration of hint priorities
