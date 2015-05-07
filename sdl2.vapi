@@ -664,6 +664,7 @@ namespace SDL {
 		 *
 		 * @return Returns the string value of a hint or null if the hint isn't set.
 		 */
+		[CCode (cname="SDL_GetHint")]
 		public static unowned string @get(string name);
 
 		/**
