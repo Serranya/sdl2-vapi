@@ -1458,6 +1458,20 @@ namespace SDL {
 		public static Window? create(string title, int x, int y, int w, int h, uint32 flags);
 
 		/**
+		 * Use this function to create a window and default renderer.
+		 *
+		 * @param width The width of the window.
+		 * @param height The height of the window.
+		 * @param flags 0, or one or more of the following {@link SDL.Window.Flags} OR'd together:
+		 * @param window The created {@link Window} or null on error.
+		 * @param renderer The created {@link Renderer} or null on error.
+		 *
+		 * @return 0 on success, or -1 on error; call {@link SDL.get_error} for more information.
+		 */
+		[CCode (cname="SDL_CreateWindowAndRenderer")]
+		public static int create_with_renderer(int width, int height, uint32 flags, out Window window, out Renderer renderer);
+
+		/**
 		 * Use this function to get the size of a window's client area.
 		 *
 		 * null can safely be passed as the w or h parameter if the width or height value is not desired.
