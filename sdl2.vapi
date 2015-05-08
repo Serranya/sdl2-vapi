@@ -1458,7 +1458,7 @@ namespace SDL {
 		public static Window? create(string title, int x, int y, int w, int h, uint32 flags);
 
 		/**
-		 * Use this function to create a window and default renderer.
+		 * Use this function to create a {@link Window} and default {@link Renderer}.
 		 *
 		 * @param width The width of the window.
 		 * @param height The height of the window.
@@ -1470,6 +1470,19 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_CreateWindowAndRenderer")]
 		public static int create_with_renderer(int width, int height, uint32 flags, out Window window, out Renderer renderer);
+
+		/**
+		 * Use this function to create an {@link Window} from an existing native window.
+		 *
+		 * n some cases (e.g. OpenGL) and on some platforms (e.g. Microsoft Windows) the hint
+		 * {@link Hints.VIDEO_WINDOW_SHARE_PIXEL_FORMAT} needs to be configured before using this function.
+		 *
+		 * @param data A pointer to driver-dependent window creation data, typically your native window cast to a void*.
+		 *
+		 * @return The {@link Window} that was created or null on failure; call {@link SDL.get_error} for more information.
+		 */
+		[CCode (cname="CreateWindowFrom")]
+		public static Window? from_native(void *data);
 
 		/**
 		 * Use this function to get the size of a window's client area.
