@@ -1352,6 +1352,34 @@ namespace SDL {
 //                | |             __/ |                                                                                           __/ |
 //                |_|            |___/                                                                                           |___/
 
+	[CCode (cheader_file="SDL2/SDL_video.h")]
+	namespace Screensaver {
+
+		/**
+		 * Use this function to return whether the screensaver is currently enabled.
+		 *
+		 * The screensaver is enabled by default.
+		 *
+		 * @return true if the screensaver is enabled. False if it is disabled.
+		 */
+		[CCode (cname="SDL_IsScreenSaverEnabled")]
+		public static bool is_enabled();
+
+		/**
+		 * Use this function to allow the screen to be blanked by a screen saver.
+		 */
+		[CCode (cname="SDL_EnableScreenSaver")]
+		public static void enable();
+
+		/**
+		 * Use this function to prevent the screen from being blanked by a screen saver.
+		 *
+		 * If you disable the screensaver, it is automatically re-enabled when SDL quits.
+		 */
+		[CCode (cname="SDL_DisableScreenSaver")]
+		public static void disable();
+	}
+
 	[CCode (cprefix="SDL_", cname="SDL_Window", free_function="SDL_DestroyWindow", cheader_filename="SDL2/SDL_video.h", has_type_id=false)]
 	[Compact]
 	public class Window {
