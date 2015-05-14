@@ -1357,7 +1357,7 @@ namespace SDL {
 		/**
 		 * A structure that describes a display mode.
 		 */
-		[CCode (cname="SDL_DisplayMode", cheader_file="SDL2/SDL_video.h", has_type_id="false")]
+		[CCode (cname="SDL_DisplayMode", has_type_id="false")]
 		public struct Mode {
 
 			/**
@@ -2602,6 +2602,26 @@ namespace SDL {
 //              __/ |                                          | |   | |
 //             |___/                                           |_|   |_|
 
+	namespace Keyboard {
+
+		/**
+		 * Use this function to get a snapshot of the current state of the keyboard.
+		 *
+		 * Use {@link pump_events} to update the state array.
+		 *
+		 * This function gives you the current state after all events have been processed, so if a key or button has been pressed and released
+		 * before you process events, then the pressed state will never show up in the {@link get_state} calls.
+		 *
+		 * This function doesn't take into account wether shift has been pressed or not.
+		 *
+		 * @return An array of key states. A value of 1 means that the key is pressed and a value of 0 means that it is not.
+		 * Indexes into this array are obtained by using {@link Scancode} values. The array returned is a pointer to an internal SDL array.
+		 * It will be valid for the whole lifetime of the application and should not be freed by the caller.
+		 */
+		[CCode (cname="SDL_GetKeyboardState")]
+		unowned uint8[] get_state();
+	}
+
 	/**
 	 * An enumeration of key modifier masks.
 	 */
@@ -2682,7 +2702,7 @@ namespace SDL {
 	 * The values in this enumeration are based on the USB usage page standard:
 	 * [[http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf]]
 	 */
-	[CCode (cname="SDL_Scancode", cprefix="SDK_SCANCODE_", cheader_filename="SDL2/SDL_scancode.h", has_type_id=false)]
+	[CCode (cname="SDL_Scancode", cprefix="SDL_SCANCODE_", cheader_filename="SDL2/SDL_scancode.h", has_type_id=false)]
 	public enum Scancode {
 		UNKNOWN,
 		A,
