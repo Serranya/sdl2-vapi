@@ -1352,6 +1352,83 @@ namespace SDL {
 //                | |             __/ |                                                                                           __/ |
 //                |_|            |___/                                                                                           |___/
 
+	namespace Display {
+
+		/**
+		 * A structure that describes a display mode.
+		 */
+		[CCode (cname="SDL_DisplayMode", cheader_file="SDL2/SDL_video.h", has_type_id="false")]
+		public struct Mode {
+
+			/**
+			 * One of the {@link PixelFormatEnum} values.
+			 */
+			public PixelFormatEnum format;
+
+			[CCode (cname="w")]
+			public int width;
+
+			[CCode (cname="h")]
+			public int height;
+
+			/**
+			 * Refresh rate (in Hz), or 0 for unspecified.
+			 */
+			[CCode (cname="refresh_rate")]
+			public int refreshRate;
+
+			/**
+			 * Driver-specific data, initialize to 0.
+			 */
+			[CCode (cname="driverdata")]
+			public void *driverData;
+		}
+
+		/**
+		 * Use this function to get information about the current display mode.
+		 *
+		 * There's a difference between this function and {@link get_desktop_mode} when SDL runs fullscreen and has changed the resolution.
+		 * In that case this function will return the current display mode, and not the previous native display mode.
+		 *
+		 * @param index The index of the display to query.
+		 * @param mode An {@link Mode} structure filled in with the current display mode.
+		 *
+		 * @return 0 on success or a negative error code on failure. Call {@link SDL.get_error} for more information.
+		 */
+		[CCode (cname="SDL_GetCurrentDisplayMode")]
+		public int get_current_mode(int index, out Mode mode);
+
+		/**
+		 * Use this function to get information about the desktop display mode.
+		 *
+		 * There's a difference between this function and {@link get_current_mode} when SDL runs fullscreen and has changed the resolution.
+		 * In that case this function will return the previous native display mode, and not the current display mode.
+		 *
+		 * @param index The index of the display to query.
+		 * @param mode An {@link Mode} structure filled in with the current display mode.
+		 *
+		 * @return 0 on success or a negative error code on failure. Call {@link SDL.get_error} for more information.
+		 */
+		[CCode (cname="SDL_GetDesktopDisplayMode")]
+		public int get_desktop_mode(int index, out Mode mode);
+
+		/**
+		 * Use this function to get the closest match to the requested display mode.
+		 *
+		 * The available display modes are scanned and closest is filled in with the closest mode matching the requested mode and returned.
+		 * The mode format and refresh rate default to the desktop mode if they are set to 0. The modes are scanned with size being first priority,
+		 * format being second priority, and finally checking the refresh rate. If all the available modes are too small, then null is returned.
+		 *
+		 * @param index The index of the display to query.
+		 * @param mode An {@link Mode} structure containing the desired display mode.
+		 * @param closest An {@link Mode} structure filled in with the closest match of the available display modes.
+		 *
+		 * @return Returns the passed in value closest or null if no patching video mode was available. Call {@link SDL.get_error} for more information.
+		 */
+		[CCode (cname="SDL_GetClosestDisplayMode")]
+		public Mode get_closest_mode(int index, Mode mode, out Mode closest);
+	}
+
 	[CCode (cheader_file="SDL2/SDL_video.h")]
 	namespace Screensaver {
 
