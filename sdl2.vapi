@@ -3311,6 +3311,16 @@ namespace SDL {
 		 */
 		[CCode (cname="SDL_Delay")]
 		public static void delay(uint32 ms);
+
+		/**
+		 * Use this function to get the number of milliseconds since the SDL library initialization
+		 *
+		 * The value wraps if the program runs for more than ~49 days.
+		 *
+		 * @return an uint32 representing the number of milliseconds passed since the SDL library was initialized.
+		 */
+		[CCode (cname="SDL_GetTicks")]
+		public static uint32 get_ticks();
 	}
 }
 
